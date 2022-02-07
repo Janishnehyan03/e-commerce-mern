@@ -1,0 +1,19 @@
+/* import poppins font family and roboto */
+@import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700");
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+@layer components {
+  .size-selector input:checked + label {
+    @apply bg-primary text-white;
+  }
+  .color-selector input:checked + label {
+    @apply ring-2 ring-primary
+  }
+
+}
