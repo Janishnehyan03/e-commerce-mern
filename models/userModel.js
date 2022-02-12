@@ -23,6 +23,22 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verifyToken: {
+      type: String,
+      default: null,
+    },
+    tokenExpriesIn: {
+      type: Number,
+      default: Date.now() +  60 * 60 * 1000,
+    },
+    resetToken: {
+      type: String,
+      default: null,
+    }
   },
   {
     timestamps: true,
@@ -56,8 +72,6 @@ userSchema.methods.generateAuthToken = async function () {
     throw new Error(error);
   }
 };
-
-
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

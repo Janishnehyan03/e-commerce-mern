@@ -1,18 +1,29 @@
 import React from "react";
+import { useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 import Axios from "../Axios";
+import { CartDetailsContext } from "../context/CartDetails";
 function Shop() {
   const [products, setProducts] = useState([]);
   const [query, setQuery] = useState("");
+  const history = useHistory();
+  const { addToCart, cartDetails,getCart } = useContext(CartDetailsContext);
   const getProducts = async () => {
     const response = await Axios.get(`/products?${query}=true`);
     setProducts(response.data.products);
   };
-
+  const goToCart = () => {
+    history.push("/cart");
+  };
+  let user = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
     getProducts();
   }, [query]);
+  useEffect(()=>{
+    user && getCart();
+  },[])
   return (
     <>
       {/* breadcrumb */}
@@ -318,7 +329,7 @@ function Shop() {
               <div className="border border-primary w-10 h-9 flex items-center justify-center text-white bg-primary rounded cursor-pointer">
                 <i className="fas fa-th"></i>
               </div>
-              <div className="border  border-primary  w-10 h-9 flex items-center justify-center text-white  rounded cursor-pointer">
+              <div className="border  border-primary  w-10 h-9 flex items-center justify-center text-white bg-primary rounded cursor-pointer">
                 <i className="fas fa-list"></i>
               </div>
             </div>
@@ -392,12 +403,27 @@ function Shop() {
                       <div className="text-xs text-gray-500 ml-3">(500)</div>
                     </div>
                   </div>
-                  <a
-                    href="#"
-                    className="block w-full py-1 text-center text-white bg-primary border border-primary rounded-b hover:bg-transparent hover:text-primary transition"
-                  >
-                    Add To Cart{" "}
-                  </a>
+                  {user && (
+                    <div className="flex px-4 py-2 justify-center my-8">
+                      {cartDetails.find(
+                        (cartItem) => cartItem._id === item._id
+                      ) ? (
+                        <button
+                          onClick={() => goToCart()}
+                          className="bg-gray-600 text-white text-sm font-semibold px-4 py-2  hover:bg-white hover:text-gray-700 hover:border-2 transition "
+                        >
+                          Go to cart{" "}
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => addToCart(item._id, item.title)}
+                          className="bg-primary text-white text-sm font-semibold px-4 py-2 hover:text-primary hover:bg-white hover:border-2 transition"
+                        >
+                          Add To Cart
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
               </>
             ))}

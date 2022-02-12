@@ -11,4 +11,7 @@ router.post("/login", authController.login);
 router.post("/logout", authController.logout);
 // isLoggedIn
 router.get("/getUser", authController.getUser);
+router.get('/verify/:token', authController.verifyEmail);
+router.get('/resendVerificationEmail', authController.resendVerificationEmail);
+router.get('/forgotPassword/:email', authController.forgotPassword);
 module.exports = router;

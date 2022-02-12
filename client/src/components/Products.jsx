@@ -12,7 +12,7 @@ import { CartDetailsContext } from "../context/CartDetails";
 function Products() {
   const [products, setProducts] = useContext(ProductContext);
   const [loading, setLoading] = useState(false);
-  const {cartDetails, getCart} = useContext(CartDetailsContext);
+  const { cartDetails, getCart, addToCart } = useContext(CartDetailsContext);
   const user = JSON.parse(localStorage.getItem("user"));
 
   const history = useHistory();
@@ -28,22 +28,6 @@ function Products() {
       setLoading(false);
     }
   };
-
-  const addToCart = async (proId, productName) => {
-    try {
-      let res = await Axios.post(`/carts/add-to-cart/${proId}`);
-      if (res.status === 200) {
-        toast.success(`${productName} added to cart`, {
-          position: toast.POSITION.TOP_CENTER,
-          autoClose: 3000,
-        });
-      }
-      getCart();
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
-
 
   const goToCart = () => {
     history.push("/cart");
@@ -135,7 +119,9 @@ function Products() {
                   </div>
                   {/* if product in cart show added to cart or add to cart */}
                   <div className="flex px-4 py-2 justify-center my-8">
-                    {cartDetails.find((cartItem) => cartItem._id === item._id) ? (
+                    {cartDetails.find(
+                      (cartItem) => cartItem._id === item._id
+                    ) ? (
                       <button
                         onClick={() => goToCart()}
                         className="bg-gray-600 text-white text-sm font-semibold px-4 py-2  hover:bg-white hover:text-gray-700 hover:border-2 transition "

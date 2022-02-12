@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import { toast } from "react-toastify";
 import Axios from "../Axios";
 
 export const CartDetailsContext = createContext([]);
@@ -22,11 +23,26 @@ export const CartDetailsProvider = (props) => {
       console.log(error.response);
     }
   };
+  const addToCart = async (proId, productName) => {
+    try {
+      let res = await Axios.post(`/carts/add-to-cart/${proId}`);
+      if (res.status === 200) {
+        toast.success(`${productName} added to cart`, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+        });
+      }
+      getCart();
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
   const value = {
     cartDetails,
     setCartDetails,
     getCartDetails,
     getCart,
+    addToCart,
   };
   return (
     <CartDetailsContext.Provider value={value}>

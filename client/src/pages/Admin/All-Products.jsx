@@ -7,7 +7,7 @@ function AllProducts() {
 
   const getProducts = async () => {
     let { data } = await Axios.get("/products");
-    setProducts(data.doc);
+    setProducts(data.products);
   };
   const deleteItem = async (id, item) => {
     if (window.confirm(`Are you sure you want to delete ${item}?`)) {

@@ -49,7 +49,7 @@ function Orders() {
               <td
                 className="border px-4 py-2"
                 style={{
-                  color: order.status === "pending" ? "#e8b80c" : "#27f584",
+                  color: order.status === "cod" ? "#e8b80c" : "#27f584",
                 }}
               >
                 {order.status}

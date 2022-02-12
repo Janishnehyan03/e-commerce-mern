@@ -1,35 +1,40 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
+const catchAsync = require("../utils/catchAsync");
+const { sendWelcomeEmail, sendResetPasswordEmail } = require("../utils/email");
+const uuidv4 = require("uuid/v4");
 
-exports.register = async (req, res) => {
+exports.register = catchAsync(async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
     return res.status(400).json({
       message: "Please enter all fields",
     });
   }
-  try {
-    let user = await User.create({
-      username,
-      email,
-      password,
-    });
-    let token = await user.generateAuthToken();
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    });
-    res.status(200).json({
-      message: "User created successfully",
-      user: user,
-      token: token,
-    });
-  } catch (error) {
-    res.status(400).json({
-      error,
-    });
-  }
-};
+
+  let user = await User.create({
+    username,
+    email,
+    password,
+    verifyToken: uuidv4(),
+  });
+
+  sendWelcomeEmail(
+    user.email,
+    user.username,
+    "http://localhost:5000/api/v1/auth/verify/" + user.verifyToken
+  );
+  let token = await user.generateAuthToken();
+  res.cookie("jwt", token, {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  });
+  res.status(200).json({
+    message: "User created successfully",
+    user: user,
+    token: token,
+  });
+});
 
 exports.login = async (req, res) => {
   if (!req.body.email || !req.body.password) {
@@ -46,10 +51,11 @@ exports.login = async (req, res) => {
     return res.status(401).json({ message: "incorrect password" });
   }
   let token = await user.generateAuthToken();
-  // res.cookie("jwt", token, {
-  //   httpOnly: true,
-  //   maxAge: 1000 * 60 * 60 * 24 * 7,
-  // });
+  if (!user.isVerified) {
+    return res.status(401).json({
+      message: "Please verify your email",
+    });
+  }
   res.status(200).json({
     message: "Auth successful",
     status: "success",
@@ -124,6 +130,128 @@ exports.getUser = async (req, res) => {
       message: "User found",
       user,
     });
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+exports.verifyEmail = async (req, res) => {
+  const { token } = req.params;
+  try {
+    const user = await User.findOne({ verifyToken: token });
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid token",
+      });
+    }
+    if (user.isVerified) {
+      return res.status(400).json({
+        message: "Email already verified",
+      });
+    }
+    if (user.tokenExpriesIn > Date.now()) {
+      user.isVerified = true;
+      user.verifyToken = undefined;
+      user.tokenExpriesIn = undefined;
+      await user.save();
+      return res.status(200).json({
+        message: "Email verified successfully",
+      });
+    } else {
+      return res.status(400).json({
+        message: "Token expired",
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+exports.resendVerificationEmail = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "Email not found",
+      });
+    }
+    if (user.isVerified) {
+      return res.status(400).json({
+        message: "Email already verified",
+      });
+    }
+    user.verifyToken = uuidv4();
+    user.tokenExpriesIn = Date.now() + 10 * 60 * 1000;
+    await user.save();
+    sendWelcomeEmail(
+      user.email,
+      user.username,
+      "http://localhost:5000/api/v1/auth/verify/" + user.verifyToken
+    );
+    res.status(200).json({
+      message: "Email sent successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+exports.forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "Email not found",
+      });
+    }
+    user.resetToken = uuidv4();
+    user.tokenExpriesIn = Date.now() + 10 * 60 * 1000;
+    await user.save();
+    sendResetPasswordEmail(
+      user.email,
+      "http://localhost:5000/api/v1/auth/reset/" + user.resetToken
+    );
+    res.status(200).json({
+      message: "Email sent successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+  try {
+    const user = await User.findOne({ resetToken: token });
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid token",
+      });
+    }
+    if (user.tokenExpriesIn > Date.now()) {
+      user.password = password;
+      user.resetToken = undefined;
+      user.tokenExpriesIn = undefined;
+      await user.save();
+      return res.status(200).json({
+        message: "Password reset successfully",
+      });
+    } else {
+      return res.status(400).json({
+        message: "Token expired",
+      });
+    }
   } catch (error) {
     res.status(400).json({
       error,

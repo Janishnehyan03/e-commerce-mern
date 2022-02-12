@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import Axios from "../Axios";
+import { CartDetailsContext } from "../context/CartDetails";
 
 function ProductView() {
   // console params from url
   const [product, setProduct] = useState({});
+  const { addToCart, cartDetails, getCart } = useContext(CartDetailsContext);
+  const history = useHistory();
 
   const params = useParams();
   const productId = params.id;
@@ -18,8 +22,12 @@ function ProductView() {
       console.log(error.response);
     }
   };
+  const goToCart = () => {
+    history.push("/cart");
+  };
   useEffect(() => {
     getProduct();
+    getCart();
   }, []);
   return (
     <>
@@ -240,11 +248,23 @@ function ProductView() {
 
           {/* add to cart */}
           <div className="pt-4 mt-8">
-            <button className="w-40 bg-primary text-white font-semibold py-2 px-4  hover:bg-white hover:text-primary transition border border-primary mr-4">
-              <i className="fas fa-shopping-bag mr-4"></i> Add to cart
-            </button>
-            <button className="w-40 bg-gray-500 text-white font-semibold py-2 px-4  hover:bg-white hover:text-gray-500 transition border hover:border-gray-500">
-              <i className="fas fa-heart mr-4"></i> Add to cart
+            {cartDetails.find((item) => item.id === product.id) ? (
+              <button
+                onClick={() => goToCart()}
+                className="w-40 bg-gray-500 text-white font-semibold py-2 px-4  hover:bg-white hover:text-primary transition border border-primary mr-4"
+              >
+                <i className="fas fa-shopping-bag mr-4"></i> Go To Cart
+              </button>
+            ) : (
+              <button
+                onClick={() => addToCart(product._id, product.title)}
+                className="w-40 bg-primary text-white font-semibold py-2 px-4  hover:bg-white hover:text-primary transition border border-primary mr-4"
+              >
+                <i className="fas fa-shopping-bag mr-4"></i> Add to cart
+              </button>
+            )}
+            <button className="w-40 bg-gray-500 text-white font-semibold py-2  hover:bg-white hover:text-gray-500 transition border hover:border-gray-500">
+              <i className="fas fa-heart mr-4"></i> Add to wishlist
             </button>
           </div>
 
