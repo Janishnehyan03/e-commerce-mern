@@ -49,12 +49,12 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/admin", adminRoutes);
 
 // send react app
-// if (process.env.NODE_ENV === "production") {
-//   app.use(express.static(path.join(__dirname, "client/build")));
-//   app.get("*", function (req, res) {
-//     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-//   });
-// }
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client/build")));
+  app.get("*", function (req, res) {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 app.listen(process.env.PORT || 5000, () => {
   console.log("Server started at port 5000");
