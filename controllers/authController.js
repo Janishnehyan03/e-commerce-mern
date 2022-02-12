@@ -22,7 +22,9 @@ exports.register = catchAsync(async (req, res) => {
   sendWelcomeEmail(
     user.email,
     user.username,
-    "http://localhost:5000/api/v1/auth/verify/" + user.verifyToken
+    `${req.protocol}://${req.get("host")}/api/v1/auth/verify/${
+      user.verifyToken
+    }`
   );
   let token = await user.generateAuthToken();
   res.cookie("jwt", token, {
@@ -191,7 +193,9 @@ exports.resendVerificationEmail = async (req, res) => {
     sendWelcomeEmail(
       user.email,
       user.username,
-      "http://localhost:5000/api/v1/auth/verify/" + user.verifyToken
+      `${req.protocol}://${req.get("host")}/api/v1/auth/verify/${
+        user.verifyToken
+      }`
     );
     res.status(200).json({
       message: "Email sent successfully",
