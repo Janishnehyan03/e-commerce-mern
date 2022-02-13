@@ -98,7 +98,9 @@ exports.updateProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
   try {
-    let product = await Product.findByIdAndDelete(req.params.id);
+    let product = await Product.findByIdAndUpdate(req.params.id, {
+      deleted: true,
+    });
     res.status(200).json({
       message: "Product deleted successfully",
       product,

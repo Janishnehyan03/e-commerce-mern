@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import Axios from "../Axios";
 import { CartDetailsContext } from "../context/CartDetails";
 
@@ -85,23 +85,25 @@ function ProductView() {
             {product.title}
           </h2>
           <div className="flex items-center mb-4">
-            <div className="flex gap-1 text-sm text-yellow-400">
-              <span>
-                <i className="fas fa-star"></i>
-              </span>
-              <span>
-                <i className="fas fa-star"></i>
-              </span>
-              <span>
-                <i className="fas fa-star"></i>
-              </span>
-              <span>
-                <i className="fas fa-star"></i>
-              </span>
-              <span>
-                <i className="fas fa-star"></i>
-              </span>
-            </div>
+            <Link to={`/rating/${product._id}`}>
+              <div className="flex gap-1 text-sm text-yellow-400">
+                <span>
+                  <i className="fas fa-star"></i>
+                </span>
+                <span>
+                  <i className="fas fa-star"></i>
+                </span>
+                <span>
+                  <i className="fas fa-star"></i>
+                </span>
+                <span>
+                  <i className="fas fa-star"></i>
+                </span>
+                <span>
+                  <i className="fas fa-star"></i>
+                </span>
+              </div>
+            </Link>
             <div className="text-xs text-gray-500 ml-3">(150 reviews)</div>
           </div>
           <div>

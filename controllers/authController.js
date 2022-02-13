@@ -44,7 +44,7 @@ exports.login = async (req, res) => {
       message: "Please enter all fields",
     });
   }
-  let user = await User.findOne({ email: req.body.email });
+  let user = await User.findOne({ email: req.body.email }).select("+password");
   if (!user) {
     return res.status(401).json({ message: "user not found" });
   }

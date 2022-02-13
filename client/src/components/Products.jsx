@@ -8,15 +8,24 @@ import { Link, useHistory } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { ProductContext } from "../context/ProductContext";
 import { CartDetailsContext } from "../context/CartDetails";
+import axios from "axios";
 
 function Products() {
   const [products, setProducts] = useContext(ProductContext);
   const [loading, setLoading] = useState(false);
   const { cartDetails, getCart, addToCart } = useContext(CartDetailsContext);
   const user = JSON.parse(localStorage.getItem("user"));
-
+  const [images, setImages] = useState([]);
+  
   const history = useHistory();
 
+  let getImageData = async () => {
+    setLoading(true);
+    let data = await axios.get("https://fakestoreapi.com/products");
+    setImages(data.data);
+    setLoading(false);
+  };
+  
   const getProducts = async () => {
     setLoading(true);
     try {
@@ -28,13 +37,14 @@ function Products() {
       setLoading(false);
     }
   };
-
+  
   const goToCart = () => {
     history.push("/cart");
   };
-
+  
   useEffect(() => {
     getProducts();
+    getImageData();
     user && getCart();
   }, []);
   return (
@@ -62,11 +72,15 @@ function Products() {
                   {/* image */}
                   {/* {data.map((product) => ( */}
                   <div className="relative">
-                    <img
-                      src="https://source.unsplash.com/user/erondu/1600x900"
-                      alt={item.title}
-                      className="w-full h-60 object-cover"
-                    />
+                    {images ? (
+                      <img
+                        src={`https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg`}
+                        alt={item.title}
+                        className="w-full h-60 object-cover"
+                      />
+                    ) : (
+                      <h1>loading</h1>
+                    )}
                     <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
                       <Link
                         to={`/view/${item._id}`}
