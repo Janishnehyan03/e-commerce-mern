@@ -42,7 +42,7 @@ function AddProduct() {
         oldPrice,
         colors,
       });
-      if (res.status === 200) {
+      if (res.data.success) {
         toast.success("Product Added Successfully", {
           position: "top-center",
           autoClose: 2000,

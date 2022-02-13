@@ -22,10 +22,12 @@ import PlaceOrder from "./pages/Place-Order";
 import Orders from "./pages/Orders";
 import OrderSuccess from "./pages/OrderSuccess";
 import Profile from "./pages/Profile";
+import RatingComponent from "./pages/Rating";
 
 function App() {
   const cookies = new Cookies();
   const token = cookies.get("jwt");
+
   useEffect(() => {
     if (!token) {
       localStorage.removeItem("user");
@@ -57,6 +59,7 @@ function App() {
               <ProtectedRoute path="/place-order" component={PlaceOrder} />
               <ProtectedRoute path="/orders" component={Orders} />
               <ProtectedRoute path="/success-order" component={OrderSuccess} />
+              <ProtectedRoute path="/rating/:id" component={RatingComponent} />
             </ProductProvider>
           </Switch>
         </CartProvider>

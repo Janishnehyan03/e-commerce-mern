@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema(
       //  this is not editable
       type: String,
       required: true,
-      immutable: true,
+      select: false,
     },
     isAdmin: {
       type: Boolean,
@@ -33,12 +33,12 @@ const userSchema = new mongoose.Schema(
     },
     tokenExpriesIn: {
       type: Number,
-      default: Date.now() +  60 * 60 * 1000,
+      default: Date.now() + 60 * 60 * 1000,
     },
     resetToken: {
       type: String,
       default: null,
-    }
+    },
   },
   {
     timestamps: true,
