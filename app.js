@@ -9,6 +9,7 @@ const orderRoutes = require("./routes/order.js");
 const cartRoutes = require("./routes/cart.js");
 const authRoutes = require("./routes/auth.js");
 const adminRoutes = require("./routes/admin.js");
+const reviewRoutes = require("./routes/review.js");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const path = require("path");
@@ -47,6 +48,7 @@ app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/carts", cartRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/reviews", reviewRoutes);
 
 // send react app
 if (process.env.NODE_ENV === "production") {

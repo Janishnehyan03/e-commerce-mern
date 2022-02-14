@@ -39,11 +39,21 @@ const productSchema = new mongoose.Schema(
     oldPrice: {
       type: Number,
     },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+// get all products that are not deleted
+productSchema.pre(/^find/, function (next) {
+  this.find({ deleted: { $ne: true } });
+  next();
+});
 
 const Product = mongoose.model("Product", productSchema);
 module.exports = Product;
