@@ -11,5 +11,10 @@ router
   .post(authController.verifyToken, reviewController.writeReview);
 
 router.route("/my-reviews").get(reviewController.getMyReviews);
+router.get(
+  "/check-review/:productId",
+  authController.verifyToken,
+  reviewController.checkAlreadyReviewed
+);
 
 module.exports = router;

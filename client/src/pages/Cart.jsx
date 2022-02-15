@@ -45,10 +45,10 @@ function CartPage() {
   useEffect(() => {
     getCartDetails();
   }, []);
-  useEffect(() => {});
+
   return (
     <div>
-      <div className="flex flex-wrap justify-center my-8">
+      <div className="flex flex-wrap justify-center my-44">
         <>
           <h1 className="text-3xl text-center absolute right-4 font-bold">
             Total Price: ${" "}
@@ -192,16 +192,27 @@ function CartPage() {
                     </table>
                   ) : (
                     <>
-                      <h1 className="text-3xl font-medium text-center">
-                        No Products in Cart
-                      </h1>
+                      <div className="container mx-auto p-24">
+                        <div className="flex flex-col items-center justify-center">
+                          <div className="flex-shrink-0 h-20 w-20">
+                            <img
+                              className="h-full w-full"
+                              src="https://www.freepnglogos.com/uploads/shopping-cart-png/shopping-cart-svg-png-icon-download-28.png"
+                              alt=""
+                            />
+                          </div>
+                          <div className="mt-4">
+                            <h1 className="text-center text-2xl font-bold">No items in cart</h1>
+                          </div>
+                        </div>
+                      </div>
                     </>
                   )}
                 </div>
                 {cartDetails.length > 0 && (
                   <button
                     onClick={() => clearCart()}
-                    className="bg-red-400 text-white hover:bg-primary transition cursor-pointer px-4 py-4 mt-4 absolute left-4"
+                    className="bg-red-400 text-white hover:bg-primary transition cursor-pointer px-4 py-4 mt-4 absolute left-4  top-48"
                   >
                     Clear Cart
                   </button>
@@ -215,7 +226,7 @@ function CartPage() {
       {cartDetails.length > 0 && (
         <Link
           to="/place-order"
-          className="bg-green-400 text-white hover:bg-gray-800 transition cursor-pointer px-4 py-4 mt-4 absolute right-4"
+          className="bg-green-400 text-white hover:bg-gray-800 transition cursor-pointer px-4 py-4 mt-4 absolute right-4 top-48"
         >
           Place Order
         </Link>

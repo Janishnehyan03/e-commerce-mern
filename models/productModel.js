@@ -50,10 +50,10 @@ const productSchema = new mongoose.Schema(
 );
 
 // get all products that are not deleted
-productSchema.pre(/^find/, function (next) {
-  this.find({ deleted: { $ne: true } });
-  next();
-});
+// productSchema.pre(/^find/, function (next) {
+//   this.find({ deleted: { $ne: true } });
+//   next();
+// });
 
 const Product = mongoose.model("Product", productSchema);
 module.exports = Product;

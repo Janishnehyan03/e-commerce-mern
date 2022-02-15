@@ -14,7 +14,11 @@ const instance = new Razorpay({
 
 exports.getAllOrders = async (req, res) => {
   try {
-    let orders = await order.find();
+    let orders = await Order.find({ $ne: { status: "pending" } })
+      .sort({
+        createdAt: -1,
+      })
+      .populate("userId", "username email").populate("products.productId");
     res.status(200).json({
       message: "orders fetched successfully",
       results: orders.length,

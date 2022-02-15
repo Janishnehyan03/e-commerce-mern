@@ -4,9 +4,11 @@ import Axios from "../Axios";
 import Cookies from "universal-cookie";
 import { CartContext } from "../context/CartCount";
 import { CartDetailsContext } from "../context/CartDetails";
+import { SearchContext } from "../context/Search";
 
 function Navbar() {
   const { cartCount, getCartCount } = useContext(CartContext);
+  const { search, setSearch, getSearchData } = useContext(SearchContext);
   const { cartDetails } = useContext(CartDetailsContext);
   const user = JSON.parse(localStorage.getItem("user"));
   const cookies = new Cookies();
@@ -47,10 +49,16 @@ function Navbar() {
               type="text"
               className="w-full border border-primary border-r-0 pl-12 py-3 pr-3 rounded-1-md focus:outline-none"
               placeholder="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
-            <button className="bg-primary border border-primary text-white px-8 rounded-r-md hover:bg-transparent hover:text-primary transition">
+            <Link
+              to={"/search"}
+              onClick={(e) => getSearchData(e)}
+              className="bg-primary border border-primary text-white px-8 rounded-r-md hover:bg-transparent hover:text-primary transition"
+            >
               search
-            </button>
+            </Link>
           </div>
           {/* icons */}
           <div className="flex items-center space-x-4">
@@ -92,7 +100,9 @@ function Navbar() {
               <div className="text-2xl">
                 <i className="fas fa-user"></i>
               </div>
-              <div className="text-xs leading-3">account</div>
+              <div className="text-xs leading-3">
+                {user ? user.username : "profile"}
+              </div>
               <span className="absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs">
                 8
               </span>
@@ -187,9 +197,13 @@ function Navbar() {
             </div>
             {user ? (
               <>
-                <p className="text-gray-200 mr-52 hover:text-white transition">
-                  {user.username}
-                </p>
+                {user.isAdmin && (
+                  <Link to={"/dashboard"}>
+                    <button className="text-white bg-gray-500 rounded-3xl mr-36 px-4 py-2 hover:text-primary hover:bg-white transition">
+                      Dashboard
+                    </button>
+                  </Link>
+                )}
                 {/* logout btn */}
                 <button
                   onClick={logout}

@@ -1,5 +1,22 @@
 const Review = require("../models/reviewModel");
 
+exports.checkAlreadyReviewed = async (req, res, next) => {
+  const { productId } = req.params;
+  const review = await Review.findOne({
+    userId: req.user._id,
+    productId: productId,
+    deleted: false,
+  });
+
+  if (review) {
+    res.status(200).json({
+      message: "You have already reviewed this product",
+      status: "already reviewed",
+      review,
+    });
+  }
+  next();
+};
 exports.writeReview = async (req, res, next) => {
   try {
     if (!req.body.review || !req.body.rating) {

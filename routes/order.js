@@ -5,7 +5,7 @@ const {
 } = require("../controllers/authController.js");
 const orderController = require("../controllers/orderController.js");
 
-router.get("/", verifyToken, orderController.getAllOrders);
+router.get("/", verifyAdminToken, orderController.getAllOrders);
 
 router.post("/", verifyToken, orderController.createOrder);
 router.post('/my-orders', verifyToken, orderController.getMyOrders);

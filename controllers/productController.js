@@ -3,7 +3,7 @@ const Product = require("../models/productModel");
 exports.getAllProducts = async (req, res) => {
   try {
     let query = req.query;
-    let products = await Product.find(query);
+    let products = await Product.find({ deleted: false });
     if (query.lt) {
       query.price = { $lt: query.lt };
       delete query.lt;
@@ -106,6 +106,26 @@ exports.deleteProduct = async (req, res) => {
       product,
     });
   } catch (error) {
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+exports.searchProduct = async (req, res) => {
+  try {
+    let products = await Product.find({
+      title: { $regex: req.query.search, $options: "i" },
+      deleted: false,
+    });
+    res.status(200).json({
+      message: "Products fetched successfully",
+      results: products.length,
+      products,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
     res.status(400).json({
       error,
     });

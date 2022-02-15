@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
@@ -23,6 +23,12 @@ import Orders from "./pages/Orders";
 import OrderSuccess from "./pages/OrderSuccess";
 import Profile from "./pages/Profile";
 import RatingComponent from "./pages/Rating";
+import Dashboard from "./pages/Admin/Dashboard";
+import All_orders from "./pages/Admin/All_orders";
+import All_users from "./pages/Admin/All_users";
+import View_user from "./pages/Admin/View_user";
+import Search_data from "./pages/Search_data";
+import { SearchProvider } from "./context/Search";
 
 function App() {
   const cookies = new Cookies();
@@ -36,34 +42,50 @@ function App() {
 
   return (
     <Router>
-      <CartDetailsProvider>
-        <CartProvider>
-          <Navbar />
-          <Switch>
-            <ProductProvider>
-              <Route exact path="/" component={Home} />
-              <Route path="/shop" component={Shop} />
-              <Route path="/view/:id" component={ProductView} />
-              <Route path="/login" component={Login} />
-              <Route path="/signup" component={Signup} />
-              {/* if url is not available load an error page with current url */}
-              <ProtectedRoute
-                path={"/admin/edit-product/:id"}
-                component={EditProduct}
-              />
-              <ProtectedRoute path={"/cart"} component={Cart} />
-              <ProtectedRoute path={"/profile"} component={Profile} />
-              <ProtectedRoute path={"/checkout"} component={Checkout} />
-              <ProtectedRoute path={"/add-product"} component={AddProduct} />
-              <ProtectedRoute path="/admin-products" component={AllProducts} />
-              <ProtectedRoute path="/place-order" component={PlaceOrder} />
-              <ProtectedRoute path="/orders" component={Orders} />
-              <ProtectedRoute path="/success-order" component={OrderSuccess} />
-              <ProtectedRoute path="/rating/:id" component={RatingComponent} />
-            </ProductProvider>
-          </Switch>
-        </CartProvider>
-      </CartDetailsProvider>
+      <SearchProvider>
+        <CartDetailsProvider>
+          <CartProvider>
+            <Navbar />
+            <Switch>
+              <ProductProvider>
+                <Route exact path="/" component={Home} />
+                <Route path="/search" component={Search_data} />
+                <Route path="/shop" component={Shop} />
+                <Route path="/view/:id" component={ProductView} />
+                <Route path="/login" component={Login} />
+                <Route path="/signup" component={Signup} />
+                {/* if url is not available load an error page with current url */}
+                <ProtectedRoute
+                  path={"/admin/edit-product/:id"}
+                  component={EditProduct}
+                />
+                <ProtectedRoute path={"/cart"} component={Cart} />
+                <ProtectedRoute path={"/profile"} component={Profile} />
+                <ProtectedRoute path={"/checkout"} component={Checkout} />
+                <ProtectedRoute path={"/add-product"} component={AddProduct} />
+                <ProtectedRoute
+                  path="/admin-products"
+                  component={AllProducts}
+                />
+                <ProtectedRoute path="/place-order" component={PlaceOrder} />
+                <ProtectedRoute path="/orders" component={Orders} />
+                <ProtectedRoute
+                  path="/success-order"
+                  component={OrderSuccess}
+                />
+                <ProtectedRoute
+                  path="/rating/:id"
+                  component={RatingComponent}
+                />
+                <ProtectedRoute path="/dashboard" component={Dashboard} />
+                <ProtectedRoute path="/admin-orders" component={All_orders} />
+                <ProtectedRoute path="/admin-users" component={All_users} />
+                <ProtectedRoute path="/view-user/:id" component={View_user} />
+              </ProductProvider>
+            </Switch>
+          </CartProvider>
+        </CartDetailsProvider>
+      </SearchProvider>
       <Footer />
     </Router>
   );
