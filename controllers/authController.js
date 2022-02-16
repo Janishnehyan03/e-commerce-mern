@@ -2,7 +2,6 @@ const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const catchAsync = require("../utils/catchAsync");
 const {
-  sendWelcomeEmail,
   sendResetPasswordEmail,
   sendRegistrationEmail,
 } = require("../utils/email");
@@ -212,9 +211,8 @@ exports.resendVerificationEmail = async (req, res) => {
     user.verifyToken = uuidv4();
     user.tokenExpriesIn = Date.now() + 10 * 60 * 1000;
     await user.save();
-    sendWelcomeEmail(
+    sendResetPasswordEmail(
       user.email,
-      user.username,
       `${req.protocol}://${req.get("host")}/api/v1/auth/verify/${
         user.verifyToken
       }`
@@ -223,6 +221,7 @@ exports.resendVerificationEmail = async (req, res) => {
       message: "Email sent successfully",
     });
   } catch (error) {
+    console.log(error);
     res.status(400).json({
       error,
     });

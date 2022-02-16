@@ -27,6 +27,7 @@ function SignUp() {
         password,
         username,
       });
+      console.log(res);
       if (res.data.success) {
         setLoading(false);
 
@@ -37,7 +38,7 @@ function SignUp() {
         cookies.set("jwt", res.data.token, {
           maxAge: 1000 * 60 * 60 * 24 * 7,
         });
-
+        localStorage.setItem("emailData", JSON.stringify(res.data.user));
         window.location.href = "/verify-msg";
       }
     } catch (error) {
