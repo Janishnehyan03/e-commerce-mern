@@ -1,14 +1,25 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const catchAsync = require("../utils/catchAsync");
-const { sendWelcomeEmail, sendResetPasswordEmail } = require("../utils/email");
+const {
+  sendWelcomeEmail,
+  sendResetPasswordEmail,
+  sendRegistrationEmail,
+} = require("../utils/email");
 const uuidv4 = require("uuid/v4");
 
 exports.register = catchAsync(async (req, res) => {
   const { username, email, password } = req.body;
+
   if (!username || !email || !password) {
     return res.status(400).json({
       message: "Please enter all fields",
+    });
+  }
+  let alreadyExists = await User.findOne({ email });
+  if (alreadyExists) {
+    return res.status(400).json({
+      message: "Email already exists",
     });
   }
 
@@ -19,7 +30,7 @@ exports.register = catchAsync(async (req, res) => {
     verifyToken: uuidv4(),
   });
 
-  sendWelcomeEmail(
+  sendRegistrationEmail(
     user.email,
     user.username,
     `${req.protocol}://${req.get("host")}/api/v1/auth/verify/${
@@ -35,6 +46,10 @@ exports.register = catchAsync(async (req, res) => {
     message: "User created successfully",
     user: user,
     token: token,
+    success: true,
+    url: `${req.protocol}://${req.get("host")}/api/v1/auth/verify/${
+      user.verifyToken
+    }`,
   });
 });
 
@@ -76,7 +91,12 @@ exports.verifyToken = async (req, res, next) => {
   }
   const token = authToken.split(" ")[1];
   try {
-    const decoded = await jwt.verify(token, process.env.JWT_KEY);
+    if (token === "undefined") {
+      return res.status(401).json({
+        message: "No token provided",
+      });
+    }
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
     const user = await User.findById(decoded._id);
     req.user = user;
     next();
@@ -158,7 +178,9 @@ exports.verifyEmail = async (req, res) => {
       user.verifyToken = undefined;
       user.tokenExpriesIn = undefined;
       await user.save();
-      return res.status(200).json({
+      res.render("email/verify", {
+        username: user.username,
+        email: user.email,
         message: "Email verified successfully",
       });
     } else {

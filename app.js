@@ -49,6 +49,9 @@ app.use("/api/v1/carts", cartRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/reviews", reviewRoutes);
+// app.get("/", (req, res) => {
+//   res.render('email/verify');
+// });
 
 // send react app
 if (process.env.NODE_ENV === "production") {

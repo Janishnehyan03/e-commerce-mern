@@ -8,10 +8,10 @@ router.post("/register", authController.register);
 // login
 router.post("/login", authController.login);
 // logout
-router.post("/logout", authController.logout);
+router.post("/logout", authController.verifyToken, authController.logout);
 // isLoggedIn
 router.get("/getUser", authController.getUser);
-router.get('/verify/:token', authController.verifyEmail);
-router.get('/resendVerificationEmail', authController.resendVerificationEmail);
-router.get('/forgotPassword/:email', authController.forgotPassword);
+router.get("/verify/:token", authController.verifyEmail);
+router.get("/resendVerificationEmail", authController.resendVerificationEmail);
+router.get("/forgotPassword/:email", authController.forgotPassword);
 module.exports = router;

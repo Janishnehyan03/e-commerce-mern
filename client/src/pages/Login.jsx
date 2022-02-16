@@ -4,8 +4,7 @@ import { CircularProgress } from "@material-ui/core";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, Redirect } from "react-router-dom";
-import Cookies from 'universal-cookie';
-
+import Cookies from "universal-cookie";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -26,15 +25,15 @@ function Login() {
       let res = await Axios.post("/auth/login", { email, password });
       if (res.data.status === "success") {
         setLoading(false);
-        //  store token in local storage
-        // localStorage.setItem("token", res.data.token, {
-        //   expires: new Date(Date.now() + 3600 * 1000), // 1 hour
-        // });
+
         cookies.set("jwt", res.data.token, {
           maxAge: 1000 * 60 * 60 * 24 * 7,
         });
         localStorage.setItem("user", JSON.stringify(res.data.user));
-        toast.success("Login Successful");
+        toast.success("Login Successful", {
+          position: "top-center",
+          autoClose: 5000,
+        });
         //  redirect to home page
         window.location.href = "/";
       }

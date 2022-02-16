@@ -29,6 +29,7 @@ import All_users from "./pages/Admin/All_users";
 import View_user from "./pages/Admin/View_user";
 import Search_data from "./pages/Search_data";
 import { SearchProvider } from "./context/Search";
+import Verify from "./pages/Verify";
 
 function App() {
   const cookies = new Cookies();
@@ -54,6 +55,7 @@ function App() {
                 <Route path="/view/:id" component={ProductView} />
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
+                <Route path="/verify-msg" component={Verify} />
                 {/* if url is not available load an error page with current url */}
                 <ProtectedRoute
                   path={"/admin/edit-product/:id"}

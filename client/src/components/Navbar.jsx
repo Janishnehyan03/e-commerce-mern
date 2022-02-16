@@ -17,7 +17,8 @@ function Navbar() {
     try {
       await Axios.post("/auth/logout");
       cookies.remove("jwt");
-      window.location.href = "/";
+      // redirect to homepage with newtab
+      window.open("/", "_blank");
     } catch (error) {
       console.log(error.response);
     }

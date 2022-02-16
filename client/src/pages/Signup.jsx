@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, Redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
-
+import emailjs from "@emailjs/browser";
 function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,19 +28,31 @@ function SignUp() {
         password,
         username,
       });
-      if (res.data.status === "success") {
+      if (res.data.success) {
         setLoading(false);
-        //  store token in local storage
-        // localStorage.setItem("token", res.data.token, {
-        //   expires: new Date(Date.now() + 3600 * 1000), // 1 hour
-        // });
+
+        toast.success("Account created successfully", {
+          position: "top-center",
+          autoClose: 5000,
+        });
         cookies.set("jwt", res.data.token, {
           maxAge: 1000 * 60 * 60 * 24 * 7,
         });
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        toast.success("Login Successful");
-        //  redirect to home page
-        window.location.href = "/";
+        // send email to user with token
+        emailjs.init(
+          "user_dqjc99JKrROrqbmZMf8RH"
+        );
+        emailjs.send(
+          "gmail",
+          "service_0nyx539",
+          {
+            to_email: email,
+            to_name: username,
+            token: res.data.url,
+          }
+        );
+
+        window.location.href = "/verify-msg";
       }
     } catch (error) {
       console.log(error.response.data.message);
@@ -55,7 +67,9 @@ function SignUp() {
       <div className="container py-16">
         <ToastContainer />
         <div className="max-w-lg mx-auto shadow px-6 py-7 rounded overflow-hidden">
-          <h2 className="text-2xl uppercase font-medium mb-1">Create Account</h2>
+          <h2 className="text-2xl uppercase font-medium mb-1">
+            Create Account
+          </h2>
           <p className="text-gray-600 mb-6 text-sm">Sign up</p>
           <form action="#">
             <div className="space-y-4">

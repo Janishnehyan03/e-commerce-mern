@@ -123,6 +123,7 @@ exports.searchProduct = async (req, res) => {
       results: products.length,
       products,
       success: true,
+      search: req.query.search,
     });
   } catch (error) {
     console.log(error);

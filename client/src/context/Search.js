@@ -6,11 +6,13 @@ export const SearchContext = createContext({});
 export const SearchProvider = (props) => {
   const [searchData, setSearchData] = useState([]);
   const [search, setSearch] = useState("");
+  const [searchHistory, setSearchHistory] = useState("");
   const getSearchData = async () => {
     try {
       let res = await Axios.post(`/products/search?search=${search}`);
       if (res.status === 200) {
         setSearchData(res.data.products);
+        setSearchHistory(res.data.search);
       }
     } catch (error) {
       console.log(error.response);
@@ -22,6 +24,7 @@ export const SearchProvider = (props) => {
     searchData,
     search,
     setSearch,
+    searchHistory,
   };
   return (
     <SearchContext.Provider value={value}>
