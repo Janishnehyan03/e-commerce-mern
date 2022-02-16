@@ -5,7 +5,6 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, Redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
-import emailjs from "@emailjs/browser";
 function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,19 +37,6 @@ function SignUp() {
         cookies.set("jwt", res.data.token, {
           maxAge: 1000 * 60 * 60 * 24 * 7,
         });
-        // send email to user with token
-        emailjs.init(
-          "user_dqjc99JKrROrqbmZMf8RH"
-        );
-        emailjs.send(
-          "gmail",
-          "service_0nyx539",
-          {
-            to_email: email,
-            to_name: username,
-            token: res.data.url,
-          }
-        );
 
         window.location.href = "/verify-msg";
       }
