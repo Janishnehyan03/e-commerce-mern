@@ -5,7 +5,6 @@ import Cookies from 'universal-cookie'
 function ProtectedRoute({ component: Component, ...restOfProps }) {
   // const isAuthenticated = localStorage.getItem("token");
   const isAuthenticated= new Cookies().get("jwt");
-  const token = new Cookies().get("jwt");
 
   return (
     <Route

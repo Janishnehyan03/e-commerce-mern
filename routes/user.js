@@ -6,9 +6,11 @@ const {
 const userController = require("../controllers/userController.js");
 
 router.get("/", verifyAdminToken, userController.getAllUsers);
-router.get("/:id",verifyAdminToken, userController.getOneUser);
+router.get("/:id", verifyAdminToken, userController.getOneUser);
 router.patch("/:id", verifyToken, userController.updateUser);
 router.delete("/:id", verifyToken, userController.deleteUser);
 router.get("/stats", verifyAdminToken, userController.getUserStats);
+router.post("/address", verifyToken, userController.createAddress);
+router.post("/my-address", verifyToken, userController.getMyAddresses);
 
 module.exports = router;

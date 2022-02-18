@@ -77,6 +77,7 @@ exports.login = async (req, res) => {
     status: "success",
     user,
     token: token,
+    success: true,
   });
 };
 

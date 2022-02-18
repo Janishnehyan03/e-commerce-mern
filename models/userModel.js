@@ -16,7 +16,6 @@ const userSchema = new mongoose.Schema(
     password: {
       //  this is not editable
       type: String,
-      required: true,
       select: false,
     },
     isAdmin: {
@@ -38,6 +37,15 @@ const userSchema = new mongoose.Schema(
     resetToken: {
       type: String,
       default: null,
+    },
+    googleId: {
+      type: String,
+    },
+    image: {
+      type: String,
+    },
+    facebookId: {
+      type: String,
     },
   },
   {

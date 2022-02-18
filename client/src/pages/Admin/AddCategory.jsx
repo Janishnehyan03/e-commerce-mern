@@ -1,46 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import Axios from "../../Axios";
 import axios from "axios";
 import { CircularProgress } from "@material-ui/core";
 
-function AddProduct() {
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState("");
-  const [img, setImg] = useState("");
+function AddCategory() {
+  const [name, setname] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
-  const [allCategories, setAllCategories] = useState([]);
-  const [stock, setStock] = useState("");
+  const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [size, setSize] = useState("");
-  const [oldPrice, setoldPrice] = useState("");
-
-  const getAllCategories = async () => {
-    try {
-      let res = await Axios.get("/categories");
-      if (res.data.success) {
-        console.log(res.data.categories);
-        setAllCategories(res.data.categories);
-      }
-    } catch (error) {
-      console.log(error.response);
-    }
-  };
 
   const sendToCloudinary = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("file", img);
+      formData.append("file", image);
       formData.append("upload_preset", "mern-chat");
       const res = await axios.post(
         "https://api.cloudinary.com/v1_1/mern-chat/image/upload",
         formData
       );
       const { secure_url } = res.data;
-      setImg(secure_url);
+      setImage(secure_url);
       setLoading(false);
     } catch (error) {
       console.log(error.response);
@@ -50,30 +32,18 @@ function AddProduct() {
     e.preventDefault();
     setLoading(true);
     await sendToCloudinary(e);
-    if (typeof (img === "string")) {
+    if (typeof image === "string") {
       try {
-        let res = await Axios.post("/products", {
-          title,
-          price,
-          img,
+        let res = await Axios.post("/categories", {
+          name,
           description,
-          category,
-          stock,
-          size,
-          oldPrice,
+          image,
         });
         if (res.data.success) {
           toast.success(res.data.message, {
             position: "top-center",
             autoClose: 2000,
           });
-          setTitle("");
-          setPrice("");
-          setImg("");
-          setDescription("");
-          setCategory("");
-          setStock("");
-          setLoading(false);
         }
       } catch (error) {
         console.log(error.response);
@@ -82,9 +52,6 @@ function AddProduct() {
       }
     }
   };
-  useEffect(() => {
-    getAllCategories();
-  }, []);
 
   return (
     <>
@@ -100,7 +67,7 @@ function AddProduct() {
           <div className="md:col-span-1">
             <div className="px-4 sm:px-0">
               <h3 className="text-lg font-medium leading-6 text-gray-900">
-                Add Product
+                Add Category
               </h3>
             </div>
           </div>
@@ -114,13 +81,13 @@ function AddProduct() {
                         htmlFor="first-name"
                         className="block text-sm font-medium text-gray-700"
                       >
-                        Product Name
+                        Category Name
                       </label>
                       <input
                         type="text"
-                        onChange={(e) => setTitle(e.target.value)}
-                        value={title}
-                        name="first-name"
+                        onChange={(e) => setname(e.target.value)}
+                        value={name}
+                        name="name"
                         id="first-name"
                         autoComplete="given-name"
                         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
@@ -131,94 +98,16 @@ function AddProduct() {
                         htmlFor="first-name"
                         className="block text-sm font-medium text-gray-700"
                       >
-                        Product Stock
-                      </label>
-                      <input
-                        type="number"
-                        name="first-name"
-                        id="first-name"
-                        autoComplete="given-name"
-                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        onChange={(e) => setStock(e.target.value)}
-                        value={stock}
-                      />
-                    </div>
-
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        htmlFor="last-name"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Product price
-                      </label>
-                      <input
-                        type="number"
-                        name="last-name"
-                        id="last-name"
-                        autoComplete="family-name"
-                        placeholder="$100"
-                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        onChange={(e) => setPrice(e.target.value)}
-                        value={price}
-                      />
-                    </div>
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        htmlFor="last-name"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Product old price
-                      </label>
-                      <input
-                        type="number"
-                        name="last-name"
-                        id="last-name"
-                        autoComplete="family-name"
-                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        placeholder="optional"
-                        onChange={(e) => setoldPrice(e.target.value)}
-                        value={oldPrice}
-                      />
-                    </div>
-
-                    <div className="col-span-6 sm:col-span-3">
-                      <label
-                        htmlFor="country"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Category
-                      </label>
-                      <select
-                        id="country"
-                        name="country"
-                        autoComplete="country-name"
-                        className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        onChange={(e) => setCategory(e.target.value)}
-                        value={category}
-                      >
-                        {allCategories.map((category) => (
-                          <option key={category._id} value={category._id}>
-                            {category.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="col-span-6">
-                      <label
-                        htmlFor="street-address"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Description
+                        Product Description
                       </label>
                       <input
                         type="text"
-                        name="street-address"
-                        id="street-address"
-                        autoComplete="street-address"
+                        name="description"
+                        id="first-name"
+                        autoComplete="given-name"
+                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                         onChange={(e) => setDescription(e.target.value)}
                         value={description}
-                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                       />
                     </div>
                   </div>
@@ -254,7 +143,7 @@ function AddProduct() {
                               name="file-upload"
                               type="file"
                               className="sr-only"
-                              onChange={(e) => setImg(e.target.files[0])}
+                              onChange={(e) => setImage(e.target.files[0])}
                             />
                           </label>
                           <p className="pl-1">or drag and drop</p>
@@ -294,4 +183,4 @@ function AddProduct() {
   );
 }
 
-export default AddProduct;
+export default AddCategory;

@@ -18,7 +18,8 @@ exports.getAllOrders = async (req, res) => {
       .sort({
         createdAt: -1,
       })
-      .populate("userId", "username email").populate("products.productId");
+      .populate("userId", "username email")
+      .populate("products.productId");
     res.status(200).json({
       message: "orders fetched successfully",
       results: orders.length,
@@ -34,7 +35,6 @@ exports.getAllOrders = async (req, res) => {
 exports.createOrder = async (req, res) => {
   try {
     //  create order from cart
-
     if (req.body.payMethod === "cod") {
       let order = await Order.create({
         ...req.body,

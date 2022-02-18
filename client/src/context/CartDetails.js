@@ -6,7 +6,6 @@ export const CartDetailsContext = createContext([]);
 
 export const CartDetailsProvider = (props) => {
   const [cartDetails, setCartDetails] = useState([]);
-
   const getCartDetails = async () => {
     try {
       let res = await Axios.get("/carts");

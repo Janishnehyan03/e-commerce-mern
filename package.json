@@ -7,7 +7,7 @@
     "start": "node app.js",
     "dev": "NODE_ENV=development nodemon app.js",
     "prod": "NODE_ENV=production nodemon app.js",
-    "client": "npm start --prefix client",
+    "client": "cd client && npm start",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "keywords": [],
@@ -28,6 +28,8 @@
     "multer": "^1.4.4",
     "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
+    "passport": "^0.5.2",
+    "passport-google-oauth20": "^2.0.0",
     "pug": "^3.0.2",
     "razorpay": "^2.8.0"
   }

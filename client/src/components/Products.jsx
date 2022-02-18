@@ -10,13 +10,13 @@ import { ProductContext } from "../context/ProductContext";
 import { CartDetailsContext } from "../context/CartDetails";
 import axios from "axios";
 
-function Products() {
+function Products({ cartOpen, setCartOpen }) {
   const [products, setProducts] = useContext(ProductContext);
   const [loading, setLoading] = useState(false);
   const { cartDetails, getCart, addToCart } = useContext(CartDetailsContext);
   const user = JSON.parse(localStorage.getItem("user"));
   const [images, setImages] = useState([]);
-  
+
   const history = useHistory();
 
   let getImageData = async () => {
@@ -25,7 +25,7 @@ function Products() {
     setImages(data.data);
     setLoading(false);
   };
-  
+
   const getProducts = async () => {
     setLoading(true);
     try {
@@ -37,11 +37,11 @@ function Products() {
       setLoading(false);
     }
   };
-  
+
   const goToCart = () => {
-    history.push("/cart");
+    setCartOpen(!cartOpen);
   };
-  
+
   useEffect(() => {
     getProducts();
     getImageData();
@@ -62,7 +62,7 @@ function Products() {
           </>
         ) : (
           <>
-            <div className="grid grid-cols-4 gap-6">
+            <div className="grid gap-6 md:grid-cols-4">
               {/* item */}
               {products.map((item, index) => (
                 <div
@@ -74,27 +74,16 @@ function Products() {
                   <div className="relative">
                     {images ? (
                       <img
-                        src={`https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg`}
+                        src={item.img}
                         alt={item.title}
                         className="w-full h-60 object-cover"
                       />
                     ) : (
                       <h1>loading</h1>
                     )}
-                    <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
-                      <Link
-                        to={`/view/${item._id}`}
-                        className="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
-                      >
-                        <i className="fas fa-search"></i>
-                      </Link>
-                      <a
-                        href="#"
-                        className="text-white text-lg w-9 h-8 rounded-full bg-primary flex items-center justify-center hover:bg-gray-800 transition"
-                      >
-                        <i className="fas fa-heart"></i>
-                      </a>
-                    </div>
+                    <Link to={`/view/${item._id}`}>
+                      <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition"></div>
+                    </Link>
                   </div>
                   <div className="pt-4 pb-3 px-4">
                     <a href="#">
@@ -138,7 +127,7 @@ function Products() {
                     ) ? (
                       <button
                         onClick={() => goToCart()}
-                        className="bg-gray-600 text-white text-sm font-semibold px-4 py-2  hover:bg-white hover:text-gray-700 hover:border-2 transition "
+                        className="bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded-full"
                       >
                         Go to cart{" "}
                       </button>
@@ -147,7 +136,7 @@ function Products() {
                         {user && (
                           <button
                             onClick={() => addToCart(item._id, item.title)}
-                            className="bg-primary text-white text-sm font-semibold px-4 py-2 hover:text-primary hover:bg-white hover:border-2 transition "
+                            className="bg-gray-800 text-white font-bold py-2 px-4 rounded-full hover:bg-gray-600"
                           >
                             Add To Cart
                           </button>

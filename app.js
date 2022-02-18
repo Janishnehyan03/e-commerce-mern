@@ -10,10 +10,19 @@ const cartRoutes = require("./routes/cart.js");
 const authRoutes = require("./routes/auth.js");
 const adminRoutes = require("./routes/admin.js");
 const reviewRoutes = require("./routes/review.js");
+const categoryRoutes = require("./routes/category.js");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const path = require("path");
 const cookieParser = require("cookie-parser");
+
+
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 dotenv.config();
 app.use(morgan("dev"));
@@ -27,12 +36,7 @@ mongoose.connect(process.env.MONGO_URI, (err) => {
   }
 });
 // middlewares
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  })
-);
+
 app.use(bodyParser.json());
 // console production or development
 console.log(app.get("env"));
@@ -49,6 +53,7 @@ app.use("/api/v1/carts", cartRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/reviews", reviewRoutes);
+app.use("/api/v1/categories", categoryRoutes);
 // app.get("/", (req, res) => {
 //   res.render('email/verify');
 // });

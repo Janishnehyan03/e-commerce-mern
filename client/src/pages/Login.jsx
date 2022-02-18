@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import Axios from "../Axios";
-import { CircularProgress } from "@material-ui/core";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, Redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
+import { GoogleLogin } from "react-google-login";
+// import FacebookLogin from "react-facebook-login";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const cookies = new Cookies();
 
   // redirect to home page if token exist
@@ -17,137 +15,76 @@ function Login() {
   if (isAuthenticated) {
     return <Redirect to="/" />;
   }
-
-  const login = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      let res = await Axios.post("/auth/login", { email, password });
-      if (res.data.status === "success") {
-        setLoading(false);
-
-        cookies.set("jwt", res.data.token, {
-          maxAge: 1000 * 60 * 60 * 24 * 7,
-        });
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        toast.success("Login Successful", {
-          position: "top-center",
-          autoClose: 5000,
-        });
-        //  redirect to home page
-        window.location.href = "/";
-      }
-    } catch (error) {
-      console.log(error.response.data.message);
-      setLoading(false);
-      toast.error(error.response.data.message, {
-        position: "top-center",
+  const loginWithGoogle = async ({ profileObj }) => {
+    let res = await Axios.post("/auth/google/signUp", {
+      email: profileObj.email,
+      name: profileObj.name,
+      image: profileObj.imageUrl,
+      firsname: profileObj.givenName,
+      lastname: profileObj.familyName,
+      googleId: profileObj.googleId,
+    });
+    if (res.data.success) {
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      cookies.set("jwt", res.data.token);
+      toast.success(res.data.message, {
+        position: "top-right",
       });
+      window.location.reload();
     }
   };
+  
+
   return (
     <>
       <div className="container py-16">
         <ToastContainer />
         <div className="max-w-lg mx-auto shadow px-6 py-7 rounded overflow-hidden">
-          <h2 className="text-2xl uppercase font-medium mb-1">Login</h2>
+          <h2 className="text-2xl  font-medium mb-1">
+            Login with <span className="text-blue-700">G</span>
+            <span className="text-red-700">o</span>
+            <span className="text-orange-300">o</span>
+            <span className="text-blue-300">g</span>
+            <span className="text-green-300">l</span>
+            <span className="text-red-300">e</span>{" "}
+          </h2>
           <p className="text-gray-600 mb-6 text-sm">
             login if you are a customer
           </p>
-          <form action="#">
-            <div className="space-y-4">
-              <div className="mb-4">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="username"
-                >
-                  Email
-                </label>
-                <input
-                  type="text"
-                  className="block w-full border border-gray-300 px-4 py-3 text-sm rounded focus:ring-0 focus:border-primary placeholder:text-gray-700"
-                  placeholder="enter your email"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="username"
-                >
-                  Password
-                </label>
-                <input
-                  type="password"
-                  className="block w-full border border-gray-300 px-4 py-3 text-sm rounded focus:ring-0 focus:border-primary placeholder:text-gray-700"
-                  placeholder="enter your password"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="flex items-center justify-between mt-6">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="agree"
-                  className="text-primary focus:ring-0 rounded-sm cursor-pointer"
-                />
-                <label
-                  htmlFor="agree"
-                  className="text-gray-500 ml-3 cursor-pointer"
-                >
-                  Remeber me
-                </label>
-              </div>
-              <a href="#" className="text-primary">
-                forgot password?
-              </a>
-            </div>
-            {loading ? (
-              <CircularProgress />
-            ) : (
-              <button
-                onClick={login}
-                className="block w-full py-2 text-center text-white bg-primary border border-primary rounded hover:bg-transparent hover:text-primary transition uppercase font-roboto font-medium mt-4"
-              >
-                login
-              </button>
-            )}
-          </form>
-
-          <div className="mt-6 flex justify-center relative">
-            <div className="text-gray-600 uppercase px-3 bg-white z-10 relative">
-              Or Login With
-            </div>
-            <div className="absolute left-0 top-3 w-full border-b-2 border-gray-200"></div>
-          </div>
 
           {/* login with  google and facebook*/}
           <div className="flex items-center justify-between mt-12">
-            <div className="flex items-center border border-gray-200 rounded-3xl px-4 py-2 hover:border-black transition hover:cursor-pointer">
-              <img
-                src="https://img.icons8.com/color/48/000000/google-logo.png"
-                alt="google"
-                className="w-8 h-8 mr-2"
-              />
-              <span className="text-gray-500">Login with Google</span>
-            </div>
-            <div className="flex items-center  border border-gray-200 rounded-3xl px-4 py-2 hover:border-black transition hover:cursor-pointer">
-              <img
-                src="https://img.icons8.com/color/48/000000/facebook-new.png"
-                alt="facebook"
-                className="w-8 h-8 mr-2"
-              />
-              <span className="text-gray-500">Login with Facebook</span>
-            </div>
+            <GoogleLogin
+              clientId="504304381401-lurd70laott0g5djebu60112qcs6kvr5.apps.googleusercontent.com"
+              buttonText="Login with Google"
+              onSuccess={loginWithGoogle}
+              onFailure={loginWithGoogle}
+              cookiePolicy={"single_host_origin"}
+              render={(renderProps) => (
+                <button
+                  className="bg-blue-400 text-white hover:bg-white hover:text-blue-500  hover:border-gray-300 border-2 font-bold py-4 px-8 rounded focus:outline-none focus:shadow-outline transition"
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.disabled}
+                >
+                  Login
+                </button>
+              )}
+              buttonText="Login"
+            />
+
+            {/* </div> */}
+            {/* <FacebookLogin
+              appId="467459588371584"
+              fields="name,email,picture"
+              callback={loginWithFacebook}
+              cssClass="btnFacebook"
+              icon={
+                <img src="https://img.icons8.com/color/48/000000/facebook-new.png" />
+              }
+            /> */}
+            <div className="flex items-center  border border-gray-200 rounded-3xl px-4 py-2 hover:border-black transition hover:cursor-pointer"></div>
           </div>
-          {/* login with google and facebook*/}
-          <p className="mt-4 text-gray-600 text-center">
-            Don't have an account?{" "}
-            <Link to="/signup" className="text-primary">
-              Sign up
-            </Link>
-          </p>
         </div>
       </div>
     </>

@@ -7,7 +7,11 @@ export default function Footer() {
         <div className="container grid grid-cols-3">
           {/* footer text */}
           <div className="col-span-1 space-y-8">
-            <h1 className="text-3xl">LOGO </h1>
+            <img
+              className="h-8 w-8"
+              src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+              alt="Workflow"
+            />
             <p className="text-gray-500">
               Lorem ipsum dolor sit amet consectetur adipisicing elit.
             </p>
@@ -144,8 +148,15 @@ export default function Footer() {
         <div className="container flex items-center justify-between">
           <p className="text-gray-400 text-sm">© 2020 Copyright:</p>
 
-          <a href="#" className="text-white ml-auto mr-auto hover:text-gray-500">
-            LOGO
+          <a
+            href="#"
+            className="text-white ml-auto mr-auto hover:text-gray-500"
+          >
+            <img
+              className="h-8 w-8"
+              src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+              alt="Workflow"
+            />
           </a>
         </div>
       </div>

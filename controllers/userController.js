@@ -1,3 +1,4 @@
+const Address = require("../models/addressModel");
 const User = require("../models/userModel");
 
 exports.getAllUsers = async (req, res) => {
@@ -114,6 +115,49 @@ exports.getUserStats = async (req, res) => {
     res.status(200).json({
       message: "User stats fetched successfully",
       data,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+// create address
+exports.createAddress = async (req, res) => {
+  try {
+    const address = await Address.create({
+      ...req.body,
+      email: req.user.email,
+      user: req.user._id,
+    });
+    res.status(200).json({
+      message: "Address created successfully",
+      address,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+// get my addresses
+exports.getMyAddresses = async (req, res) => {
+  try {
+    const address = await Address.findOne({ user: req.user._id }).populate(
+      "user",
+      {
+        username: 1,
+        email: 1,
+      }
+    );
+    res.status(200).json({
+      message: "Address fetched successfully",
+      address,
     });
   } catch (error) {
     console.log(error);

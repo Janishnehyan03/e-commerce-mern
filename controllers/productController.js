@@ -1,9 +1,10 @@
 const Product = require("../models/productModel");
+const User = require("../models/userModel");
 
 exports.getAllProducts = async (req, res) => {
   try {
     let query = req.query;
-    let products = await Product.find({ deleted: false });
+    let products = await Product.find({ deleted: false }).populate("category");
     if (query.lt) {
       query.price = { $lt: query.lt };
       delete query.lt;
@@ -59,8 +60,8 @@ exports.getProduct = async (req, res) => {
 };
 
 exports.createNewProduct = async (req, res) => {
-  const { title, description, price, categories, img, stock } = req.body;
-  if (!title || !description || !price || !categories || !img || !stock) {
+  const { title, description, price, category, img, stock } = req.body;
+  if (!title || !description || !price || !category || !img || !stock) {
     return res.status(400).json({
       message: "Please enter all fields",
     });
@@ -71,6 +72,7 @@ exports.createNewProduct = async (req, res) => {
       message: "Product created successfully",
       product,
       status: "success",
+      success: true,
     });
   } catch (error) {
     res.status(400).json({
@@ -114,6 +116,16 @@ exports.deleteProduct = async (req, res) => {
 
 exports.searchProduct = async (req, res) => {
   try {
+    let userData = JSON.parse(req.body.user);
+    // add search to searchHistory of user
+    if (userData) {
+      const user = await User.findOne({ email: userData.email });
+
+      user.searchHistory.push({
+        search: req.body.search,
+      });
+      await user.save();
+    }
     let products = await Product.find({
       title: { $regex: req.query.search, $options: "i" },
       deleted: false,

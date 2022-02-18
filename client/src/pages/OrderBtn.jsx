@@ -2,18 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Axios from "../Axios";
 
-function OrderBtn({
-  payMethod,
-  getCartDetails,
-  cartDetails,
-  formData,
-  getTotal,
-  totalPrice,
-  setFormData,
-  user,
-}) {
-  const [orderId, setOrderId] = useState("");
-
+function OrderBtn({ payMethod, cartDetails, formData, totalPrice, user }) {
   function loadScript(src) {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -32,12 +21,10 @@ function OrderBtn({
     e.preventDefault();
     try {
       let res = await Axios.post("/orders/", {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
         email: formData.email,
         address: formData.address,
         phone: formData.phone,
-        amount: totalPrice + 10,
+        amount: totalPrice,
         city: formData.city,
         postcode: formData.postcode,
         notes: formData.notes,
@@ -84,8 +71,8 @@ function OrderBtn({
       key: "rzp_test_OFFIcNpSOaLOcU", // Enter the Key ID generated from the Dashboard
       amount: amount.toString(),
       currency: currency,
-      name: "Soumya Corp.",
-      description: "Test Transaction",
+      name: "Janish Nehyan",
+      description: order_id,
       image: "",
       order_id: order_id,
       handler: async function (response) {
@@ -121,15 +108,15 @@ function OrderBtn({
         }
       },
       prefill: {
-        name: "Soumya Dey",
-        email: "SoumyaDey@example.com",
-        contact: "9999999999",
+        name: "Janish Nehyan",
+        email: "janishnehyan03@gmail.com",
+        contact: "8086996655",
       },
       notes: {
-        address: "Soumya Dey Corporate Office",
+        address: "Kondotty",
       },
       theme: {
-        color: "#61dafb",
+        color: "#292252",
       },
     };
 
@@ -141,14 +128,14 @@ function OrderBtn({
       {payMethod === "cod" ? (
         <button
           onClick={(e) => placeOrder(e)}
-          className="w-full px-6 py-2 text-white bg-blue-600 hover:bg-blue-900"
+          className="w-full px-6 py-2 text-white  bg-blue-600  hover:bg-blue-900"
         >
           Place Order Now
         </button>
       ) : (
         <button
           onClick={(e) => displayRazorpay(e)}
-          className="w-full px-6 py-2 text-white bg-blue-600 hover:bg-blue-900"
+          className="w-full px-6 py-2 text-white bg-green-400 hover:bg-blue-900"
         >
           Online Payment
         </button>

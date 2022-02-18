@@ -30,10 +30,14 @@ import View_user from "./pages/Admin/View_user";
 import Search_data from "./pages/Search_data";
 import { SearchProvider } from "./context/Search";
 import Verify from "./pages/Verify";
+import CreateAddress from "./CreateAddress";
+import CartModel from "./pages/CartModel";
+import AddCategory from "./pages/Admin/AddCategory";
 
 function App() {
   const cookies = new Cookies();
   const token = cookies.get("jwt");
+  const [cartOpen, setCartOpen] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -47,9 +51,13 @@ function App() {
         <CartDetailsProvider>
           <CartProvider>
             <Navbar />
+            <CartModel open={cartOpen} setOpen={setCartOpen} />
             <Switch>
               <ProductProvider>
-                <Route exact path="/" component={Home} />
+                <Route exact path="/">
+                  <Home cartOpen={cartOpen} setCartOpen={setCartOpen} />
+                </Route>
+
                 <Route path="/search" component={Search_data} />
                 <Route path="/shop" component={Shop} />
                 <Route path="/view/:id" component={ProductView} />
@@ -61,7 +69,15 @@ function App() {
                   path={"/admin/edit-product/:id"}
                   component={EditProduct}
                 />
-                <ProtectedRoute path={"/cart"} component={Cart} />
+                <ProtectedRoute
+                  path={"/add-category"}
+                  component={AddCategory}
+                />
+                <ProtectedRoute
+                  path={"/add-address"}
+                  component={CreateAddress}
+                />
+
                 <ProtectedRoute path={"/profile"} component={Profile} />
                 <ProtectedRoute path={"/checkout"} component={Checkout} />
                 <ProtectedRoute path={"/add-product"} component={AddProduct} />

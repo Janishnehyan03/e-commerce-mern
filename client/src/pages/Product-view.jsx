@@ -46,38 +46,7 @@ function ProductView() {
       {/* product view */}
       <div className="container grid grid-cols-2 gap-6">
         <div>
-          <img
-            src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"
-            alt=""
-            className="w-full"
-          />
-          <div className="grid grid-cols-5 gap-4 mt-4">
-            <img
-              src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"
-              alt=""
-              className="w-full cursor-pointer border border-primary"
-            />
-            <img
-              src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"
-              alt=""
-              className="w-full cursor-pointer border "
-            />
-            <img
-              src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"
-              alt=""
-              className="w-full cursor-pointer border "
-            />
-            <img
-              src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"
-              alt=""
-              className="w-full cursor-pointer border "
-            />
-            <img
-              src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80"
-              alt=""
-              className="w-full cursor-pointer border "
-            />
-          </div>
+          <img src={product.img} alt="" className="w-full" />
         </div>
         {/* product content */}
         <div>

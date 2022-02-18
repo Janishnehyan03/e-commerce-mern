@@ -7,7 +7,7 @@ function Banner() {
         className="bg-cover bg-no-repeat bg-center py-36"
         style={{
           backgroundImage:
-            "url('https://image.freepik.com/free-photo/black-friday-elements-assortment_23-2149074076.jpg')",
+            "url('https://img.freepik.com/free-photo/front-view-woman-with-shopping-bag-concept_23-2148674158.jpg?w=1380')",
         }}
       >
         <div className="container mx-36">

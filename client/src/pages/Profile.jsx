@@ -16,6 +16,9 @@ export default function Profile() {
             Personal details and application.
           </p>
         </div>
+        <div className="bg-gray-50 px-4 py-5 ">
+          <img className="rounded-lg" src={user.image} alt={user.username} />
+        </div>
         <div className="border-t border-gray-200">
           <dl>
             <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

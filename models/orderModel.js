@@ -11,6 +11,7 @@ const orderSchema = new mongoose.Schema(
       {
         productId: {
           type: mongoose.Schema.Types.ObjectId,
+          required: true,
           ref: "Product",
         },
         quantity: {
@@ -23,18 +24,6 @@ const orderSchema = new mongoose.Schema(
     ],
     amount: {
       type: Number,
-      required: true,
-    },
-    firstName: {
-      type: String,
-      required: true,
-    },
-    lastName: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
       required: true,
     },
     status: {
@@ -52,9 +41,8 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    postcode: {
+    zip: {
       type: String,
-      required: true,
     },
     note: {
       type: String,

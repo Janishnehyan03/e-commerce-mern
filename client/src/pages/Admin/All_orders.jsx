@@ -14,6 +14,7 @@ function All_orders() {
       console.log(error.response);
     }
   };
+  console.log(orders);
   useEffect(() => {
     getAllOrders();
   }, []);
