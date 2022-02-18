@@ -35,15 +35,15 @@ import CartModel from "./pages/CartModel";
 import AddCategory from "./pages/Admin/AddCategory";
 
 function App() {
-  const cookies = new Cookies();
-  const token = cookies.get("jwt");
-  const [cartOpen, setCartOpen] = useState(false);
+  // const cookies = new Cookies();
+  // const token = cookies.get("jwt");
+  // const [cartOpen, setCartOpen] = useState(false);
 
-  useEffect(() => {
-    if (!token) {
-      localStorage.removeItem("user");
-    }
-  }, [token]);
+  // useEffect(() => {
+  //   if (!token) {
+  //     localStorage.removeItem("user");
+  //   }
+  // }, [token]);
 
   return (
     <Router>
