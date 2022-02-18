@@ -1,10 +1,9 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
-import Cookies from 'universal-cookie'
 
 function ProtectedRoute({ component: Component, ...restOfProps }) {
   // const isAuthenticated = localStorage.getItem("token");
-  const isAuthenticated= new Cookies().get("jwt");
+  const isAuthenticated= localStorage.getItem("token")
 
   return (
     <Route
