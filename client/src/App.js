@@ -37,7 +37,7 @@ import AddCategory from "./pages/Admin/AddCategory";
 function App() {
   // const cookies = new Cookies();
   // const token = cookies.get("jwt");
-  // const [cartOpen, setCartOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
 
   // useEffect(() => {
   //   if (!token) {
