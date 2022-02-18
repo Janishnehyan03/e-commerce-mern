@@ -1,7 +1,5 @@
 import axios from "axios";
-import Cookies from "universal-cookie";
 const token = localStorage.getItem("token");
-// const token = new Cookies().get("jwt");
 
 const Axios = axios.create({
   baseURL: "/api/v1",
