@@ -7,7 +7,6 @@ exports.getAllProducts = async (req, res) => {
     let query = req.query;
     let products = await Product.find({ deleted: false }).populate("category");
     let data = await Product.find({ category: new ObjectId(query.category) });
-    console.log(new ObjectId(query.category));
     if (query.lt) {
       query.price = { $lt: query.lt };
       delete query.lt;
@@ -15,7 +14,6 @@ exports.getAllProducts = async (req, res) => {
       query.price = { $gt: query.gt };
       delete query.gt;
     } else if (query.category) {
-      //  category is string so convert to object
       products = await Product.find({
         category: ObjectId(query.category),
         deleted: false,

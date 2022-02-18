@@ -34,7 +34,6 @@ function Login() {
       window.location.reload();
     }
   };
-  
 
   return (
     <>
@@ -63,11 +62,16 @@ function Login() {
               cookiePolicy={"single_host_origin"}
               render={(renderProps) => (
                 <button
-                  className="bg-blue-400 text-white hover:bg-white hover:text-blue-500  hover:border-gray-300 border-2 font-bold py-4 px-8 rounded focus:outline-none focus:shadow-outline transition"
                   onClick={renderProps.onClick}
                   disabled={renderProps.disabled}
+                  className="flex items-center border border-gray-200 rounded-3xl px-4 py-2 hover:border-black transition hover:cursor-pointer"
                 >
-                  Login
+                  <img
+                    src="https://img.icons8.com/color/48/000000/google-logo.png"
+                    alt="google"
+                    className="w-8 h-8 mr-2"
+                  />
+                  <span className="text-gray-500">Login with Google</span>
                 </button>
               )}
               buttonText="Login"
