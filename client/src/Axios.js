@@ -4,7 +4,7 @@ import Cookies from "universal-cookie";
 const token = new Cookies().get("jwt");
 
 const Axios = axios.create({
-  baseURL: "/api/v1",
+  baseURL: "http://localhost:5000/api/v1",
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",

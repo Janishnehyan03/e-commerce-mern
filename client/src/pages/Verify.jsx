@@ -7,7 +7,7 @@ function Verify() {
   const resendEmail = async (e) => {
     try {
       e.preventDefault();
-      let res = await Axios.post("/auth/resendVerificationEmail", {
+      await Axios.post("/auth/resendVerificationEmail", {
         email: emailData.email,
       });
     } catch (error) {

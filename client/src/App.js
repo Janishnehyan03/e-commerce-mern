@@ -59,8 +59,12 @@ function App() {
                 </Route>
 
                 <Route path="/search" component={Search_data} />
-                <Route path="/shop" component={Shop} />
-                <Route path="/view/:id" component={ProductView} />
+                <Route path="/category/:id" >
+                  <Shop cartOpen={cartOpen} setCartOpen={setCartOpen} />
+                </Route>
+                <Route path="/view/:id">
+                  <ProductView cartOpen={cartOpen} setCartOpen={setCartOpen} />
+                </Route>
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
                 <Route path="/verify-msg" component={Verify} />

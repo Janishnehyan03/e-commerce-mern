@@ -1,7 +1,19 @@
 import React from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { data } from "../Data";
+import Axios from "../Axios";
+import { useEffect } from "react";
+
 function Categories() {
+  const [categories, setCategories] = useState([]);
+  const getAllCategories = async () => {
+    let { data } = await Axios.get("/categories");
+    console.log(data);
+    setCategories(data.categories);
+  };
+  useEffect(() => {
+    getAllCategories();
+  }, []);
   return (
     <>
       {/* category text*/}
@@ -11,10 +23,10 @@ function Categories() {
         </h2>
         <div className="grid md:grid-cols-3 sm:grid-cols-1 gap-3">
           {/* item */}
-          {data.map((item) => (
-            <Link to="/shop">
+          {categories.map((item) => (
+            <Link to={`/category/${item._id}`}>
               <div
-                key={item.id}
+                key={item._id}
                 className="relative rounded-sm overflow-hidden group"
               >
                 <img
@@ -22,12 +34,9 @@ function Categories() {
                   alt={item.name}
                   className="w-full h-80 sm:h-96"
                 />
-                <a
-                  href="#"
-                  className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-xl text-white font-roboto font-medium group-hover:bg-opacity-60 transition"
-                >
+                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-xl text-white font-roboto font-medium group-hover:bg-opacity-60 transition">
                   {item.name}
-                </a>
+                </div>
               </div>
             </Link>
           ))}

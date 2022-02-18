@@ -8,7 +8,6 @@ import { CartDetailsContext } from "../context/CartDetails";
 import { useContext } from "react";
 import CartModel from "../pages/CartModel";
 
-const user = localStorage.getItem("user");
 const logout = async () => {
   const cookies = new Cookies();
   let res = await Axios.post("/auth/logout");
@@ -44,13 +43,15 @@ function Nav() {
                 </Link>
                 <div className="hidden md:block">
                   <div className="ml-10 flex items-baseline space-x-4">
-                    {user.isAdmin && (
+                    {user && user.isAdmin ? (
                       <Link
                         to={"/dashboard"}
                         className=" hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm font-medium"
                       >
                         Dashboard
                       </Link>
+                    ) : (
+                      ""
                     )}
                     <div
                       onClick={() => setCartOpen(!cartOpen)}

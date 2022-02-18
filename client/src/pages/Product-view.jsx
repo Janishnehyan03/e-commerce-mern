@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import Axios from "../Axios";
 import { CartDetailsContext } from "../context/CartDetails";
 
-function ProductView() {
+function ProductView({ cartOpen, setCartOpen }) {
   // console params from url
   const [product, setProduct] = useState({});
   const { addToCart, cartDetails, getCart } = useContext(CartDetailsContext);
@@ -23,7 +24,7 @@ function ProductView() {
     }
   };
   const goToCart = () => {
-    history.push("/cart");
+    setCartOpen(!cartOpen);
   };
   useEffect(() => {
     getProduct();
@@ -31,6 +32,7 @@ function ProductView() {
   }, []);
   return (
     <>
+      <ToastContainer />
       {/* breadcrumb */}
       <div className="container py-4 flex items-center  gap-3">
         <a href="/" className="text-primary text-base">
@@ -98,128 +100,10 @@ function ProductView() {
             <p className="text-base text-gray-400 line-through">$ 695.00</p>
           </div>
           <p className="mt-4">{product.description}</p>
-          {/* {size filtering} */}
-          <div className="pt-4">
-            <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
-              Size
-            </h3>
-            <div className="flex items-center gap-2">
-              {/* single size */}
-              <div className="size-selector">
-                <input
-                  type="radio"
-                  name="size"
-                  className="hidden"
-                  id="size-xs"
-                />
-                <label
-                  htmlFor="size-xs"
-                  className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600"
-                >
-                  XS
-                </label>
-              </div>
-              {/* single size */}
-              {/* single size */}
-              <div className="size-selector">
-                <input
-                  type="radio"
-                  name="size"
-                  className="hidden"
-                  id="size-m"
-                />
-                <label
-                  htmlFor="size-m"
-                  className="text border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600"
-                >
-                  M
-                </label>
-              </div>
-              {/* single size */}
-              {/* single size */}
-              <div className="size-selector">
-                <input
-                  type="radio"
-                  name="size"
-                  className="hidden"
-                  id="size-l"
-                />
-                <label
-                  htmlFor="size-l"
-                  className="text-xs border border-gray-200 rounded-sm h-6 w-6 flex items-center justify-center cursor-pointer shadow-sm text-gray-600"
-                >
-                  L
-                </label>
-              </div>
-              {/* single size */}
-            </div>
-          </div>
-
-          {/* {size filtering} */}
-
-          {/* color filtering */}
-          <div className="pt-4">
-            <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
-              colors
-            </h3>
-            <div className="flex items-center gap-2">
-              {/* single color */}
-              {product.colors && (
-                <>
-                  {product.colors.map((color, index) => (
-                    <>
-                      <div className="color-selector">
-                        <input
-                          type="radio"
-                          name="color"
-                          id="color-red"
-                          className="hidden"
-                        />
-                        <label
-                          htmlFor="color-red"
-                          className="border border-gray-200 rounded-sm h-5 w-5 cursor-pointer shadow-sm block"
-                          style={{ backgroundColor: color }}
-                        ></label>
-                      </div>
-                    </>
-                  ))}
-                </>
-              )}
-              {/* single color */}
-            </div>
-          </div>
-
-          {/* color filtering */}
-
-          {/* quantity */}
-          <div className="pt-4">
-            <h3 className="text-xl text-gray-800 mb-3 uppercase font-medium">
-              quantity
-            </h3>
-            <div className="flex items-center gap-2">
-              <div className="quantity-selector">
-                <button className="text-xs border border-gray-200 rounded-sm h-8 w-8 flex items-center justify-center cursor-pointer shadow-sm text-gray-800">
-                  -
-                </button>
-              </div>
-              <div className="quantity-selector">
-                <div className="text-xs border border-gray-200 rounded-sm h-8 w-8 flex items-center justify-center cursor-pointer shadow-sm text-gray-800">
-                  4
-                </div>
-              </div>
-              <div className="quantity-selector">
-                <button className="text-xs border border-gray-200 rounded-sm h-8 w-8 flex items-center justify-center cursor-pointer shadow-sm text-gray-800">
-                  +
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* quantity */}
 
           {/* add to cart */}
           <div className="pt-4 mt-8">
-            {cartDetails.find((item) => item.id === product.id) ? (
+            {cartDetails.find((item) => item._id === product._id) ? (
               <button
                 onClick={() => goToCart()}
                 className="w-40 bg-gray-500 text-white font-semibold py-2 px-4  hover:bg-white hover:text-primary transition border border-primary mr-4"

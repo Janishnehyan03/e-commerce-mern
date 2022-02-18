@@ -1,18 +1,25 @@
 const Product = require("../models/productModel");
 const User = require("../models/userModel");
+const ObjectId = require("mongoose").Types.ObjectId;
 
 exports.getAllProducts = async (req, res) => {
   try {
     let query = req.query;
     let products = await Product.find({ deleted: false }).populate("category");
+    let data = await Product.find({ category: new ObjectId(query.category) });
+    console.log(new ObjectId(query.category));
     if (query.lt) {
       query.price = { $lt: query.lt };
       delete query.lt;
     } else if (query.gt) {
       query.price = { $gt: query.gt };
       delete query.gt;
-    } else if (query.categories) {
-      query.categories = { $in: query.categories };
+    } else if (query.category) {
+      //  category is string so convert to object
+      products = await Product.find({
+        category: ObjectId(query.category),
+        deleted: false,
+      });
     } else if (query.sort) {
       products = await Product.find(query).sort(query.sort);
     } else if (query.price) {
