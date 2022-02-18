@@ -44,7 +44,15 @@ console.log(app.get("env"));
 // setup view page for pug
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
-
+app.use(function(req, res, next) {
+  res.header('Content-Type', 'application/json;charset=UTF-8')
+  res.header('Access-Control-Allow-Credentials', true)
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  )
+  next()
+})
 // routes
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/users", userRoutes);

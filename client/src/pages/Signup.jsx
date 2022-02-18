@@ -27,7 +27,6 @@ function SignUp() {
         password,
         username,
       });
-      console.log(res);
       if (res.data.success) {
         setLoading(false);
 
@@ -35,9 +34,13 @@ function SignUp() {
           position: "top-center",
           autoClose: 5000,
         });
-        cookies.set("jwt", res.data.token, {
-          maxAge: 1000 * 60 * 60 * 24 * 7,
-        });
+        cookies.set(
+          "jwt",
+          res.data.token,
+          { httpOnly: false, secure: true },
+          { path: "/" },
+          { expire: new Date(Date.now() + 3600 * 1000) }
+        );
         localStorage.setItem("emailData", JSON.stringify(res.data.user));
         window.location.href = "/verify-msg";
       }
