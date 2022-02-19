@@ -65,6 +65,7 @@ exports.getProduct = async (req, res) => {
 };
 
 exports.createNewProduct = async (req, res) => {
+  console.log(req.body);
   const { title, description, price, category, img, stock } = req.body;
   if (!title || !description || !price || !category || !img || !stock) {
     return res.status(400).json({

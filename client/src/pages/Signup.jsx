@@ -45,9 +45,9 @@ function SignUp() {
         window.location.href = "/verify-msg";
       }
     } catch (error) {
-      console.log(error.response.data.message);
+      console.log(error.data.message);
       setLoading(false);
-      toast.error(error.response.data.message, {
+      toast.error(error.data.message, {
         position: "top-center",
       });
     }

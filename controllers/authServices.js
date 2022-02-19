@@ -4,13 +4,22 @@ const jwt = require("jsonwebtoken");
 exports.googleSignup = async (req, res, next) => {
   try {
     let user = await User.findOne({ googleId: req.body.googleId });
+    let token = await user.generateAuthToken();
+
     if (user) {
-      res.status(200).json({
-        message: "Login success",
-        token: await user.generateAuthToken(),
-        user: user,
-        success: true,
+      await res.cookie("jwt", token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
       });
+      res
+        .status(200)
+        // send cookies to client
+        .json({
+          message: "Login success",
+          user: user,
+          success: true,
+          token: token,
+        });
     } else {
       user = await User.create({
         googleId: req.body.googleId,
@@ -21,6 +30,12 @@ exports.googleSignup = async (req, res, next) => {
         image: req.body.image,
       });
       let token = await user.generateAuthToken();
+      // send cookies to client
+      res.cookie("jwt", token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+      });
+
       res.status(200).json({
         message: "Login success",
         user: user,

@@ -11,8 +11,8 @@ function Verify() {
         email: emailData.email,
       });
     } catch (error) {
-      console.log(error.response.data.message);
-      toast.error(error.response.data.message, {
+      console.log(error.data.message);
+      toast.error(error.data.message, {
         position: "top-center",
       });
     }

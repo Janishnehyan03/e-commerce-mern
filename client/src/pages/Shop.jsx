@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useHistory, Link, useParams } from "react-router-dom";
 import Axios from "../Axios";
 import { CartDetailsContext } from "../context/CartDetails";
-import { ToastContainer, } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 function Shop({ cartOpen, setCartOpen }) {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("");
@@ -79,7 +79,7 @@ function Shop({ cartOpen, setCartOpen }) {
                           <img
                             src={product.img}
                             alt={product.title}
-                            className="w-full h-full object-center object-cover"
+                            className="object-center object-cover h-64"
                           />
                         </div>
                         <div className="md:pl-3 md:w-3/4 w-full">

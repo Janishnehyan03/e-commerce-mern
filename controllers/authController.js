@@ -7,6 +7,21 @@ const {
 } = require("../utils/email");
 const uuidv4 = require("uuid/v4");
 
+const generateAccessToken = (user) => {
+  return jwt.sign(
+    {
+      id: user.id,
+      isAdmin: user.isAdmin,
+      isVerified: user.isVerified,
+      email: user.email,
+    },
+    "process.env.ACCESS_TOKEN_SECRET",
+    {
+      expiresIn: "1h",
+    }
+  );
+};
+
 exports.register = catchAsync(async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -83,13 +98,12 @@ exports.login = async (req, res) => {
 
 // verify token
 exports.verifyToken = async (req, res, next) => {
-  const authToken = req.headers.authorization;
-  if (!authToken) {
+  if (!req.cookies.jwt) {
     return res.status(401).json({
       message: "No token provided",
     });
   }
-  const token = authToken.split(" ")[1];
+  const token = req.cookies.jwt;
   try {
     if (token === "undefined") {
       return res.status(401).json({
@@ -138,7 +152,7 @@ exports.verifyAdminToken = async (req, res, next) => {
 };
 
 exports.logout = (req, res) => {
-  res.cookie("token", "logged out", {
+  res.cookie("jwt", "logged out", {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
   });
@@ -281,6 +295,37 @@ exports.resetPassword = async (req, res) => {
   } catch (error) {
     res.status(400).json({
       error,
+    });
+  }
+};
+
+exports.checkLoggedIn = async (req, res) => {
+  try {
+    const token = req.cookies.jwt;
+    if (!jwt) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    } else {
+      const decoded = jwt.verify(token, process.env.JWT_KEY);
+      const user = await User.findById(decoded._id);
+      if (!user) {
+        return res.status(401).json({
+          message: "Unauthorized",
+          error: "User not found",
+        });
+      }
+
+      res.status(200).json({
+        message: "User logged in",
+        user,
+        success: true,
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      error,
+      success: false,
     });
   }
 };

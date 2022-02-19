@@ -8,16 +8,17 @@ import { Link, useHistory } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { ProductContext } from "../context/ProductContext";
 import { CartDetailsContext } from "../context/CartDetails";
+import { UserAuthContext } from "../context/UserAuth";
 import axios from "axios";
 
 function Products({ cartOpen, setCartOpen }) {
   const [products, setProducts] = useContext(ProductContext);
   const [loading, setLoading] = useState(false);
   const { cartDetails, getCart, addToCart } = useContext(CartDetailsContext);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { authData } = useContext(UserAuthContext);
+  const user = authData;
   const [images, setImages] = useState([]);
 
-  const history = useHistory();
 
   let getImageData = async () => {
     setLoading(true);
@@ -33,7 +34,7 @@ function Products({ cartOpen, setCartOpen }) {
       setProducts(res.data.products);
       setLoading(false);
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
       setLoading(false);
     }
   };
@@ -88,7 +89,8 @@ function Products({ cartOpen, setCartOpen }) {
                   <div className="pt-4 pb-3 px-4">
                     <a href="#">
                       <h4 className="uppercase font-medium text-xl mb-2 text-gray-800 hover:text-primary transition">
-                        {item.title}
+                        {item.title.substring(0, 20)}
+                        {item.title.length > 20 ? "..." : ""}
                       </h4>
                     </a>
                     <div className="flex items-baseline mb-1 space-x-2 font-roboto">
@@ -121,7 +123,7 @@ function Products({ cartOpen, setCartOpen }) {
                     </div>
                   </div>
                   {/* if product in cart show added to cart or add to cart */}
-                  <div className="flex px-4 py-2 justify-center my-8">
+                  <div className="flex px-4 py-2 justify-center my-8 ">
                     {cartDetails.find(
                       (cartItem) => cartItem._id === item._id
                     ) ? (

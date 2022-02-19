@@ -11,7 +11,7 @@ export const CartDetailsProvider = (props) => {
       let res = await Axios.get("/carts");
       setCartDetails(res.data.products);
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
   const getCart = async () => {
@@ -19,7 +19,7 @@ export const CartDetailsProvider = (props) => {
       let res = await Axios.get("/carts");
       setCartDetails(res.data.products);
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
   const addToCart = async (proId, productName) => {
@@ -33,7 +33,7 @@ export const CartDetailsProvider = (props) => {
       }
       getCart();
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
   const value = {

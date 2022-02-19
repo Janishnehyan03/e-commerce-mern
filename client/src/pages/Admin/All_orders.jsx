@@ -11,7 +11,7 @@ function All_orders() {
       setOrders(response.data.orders);
       console.log(response.data);
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
   console.log(orders);

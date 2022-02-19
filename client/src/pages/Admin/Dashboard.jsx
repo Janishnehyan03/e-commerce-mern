@@ -33,6 +33,17 @@ function Dashboard() {
         </div>
         <div className="shadow-lg">
           <div className="bg-gray-700 p-16">
+            <div className="text-lg text-white">Total Products</div>
+            <div className="text-2xl text-white"> 238</div>
+            <Link to={"/admin-categories"}>
+              <button className="bg-gray-800 rounded-xl text-white px-8 py-2 mt-4 hover:text-gray-900 hover:bg-white transition">
+                View Categories
+              </button>
+            </Link>
+          </div>
+        </div>
+        <div className="shadow-lg">
+          <div className="bg-gray-700 p-16">
             <div className="text-lg text-white">Total Users</div>
             <div className="text-2xl text-white"> 238</div>
             <Link to={"/admin-users"}>

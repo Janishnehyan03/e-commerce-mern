@@ -20,7 +20,7 @@ function ProductView({ cartOpen, setCartOpen }) {
         setProduct(res.data.product);
       }
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
   const goToCart = () => {

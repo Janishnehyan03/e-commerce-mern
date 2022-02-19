@@ -35,6 +35,7 @@ exports.getAllOrders = async (req, res) => {
 exports.createOrder = async (req, res) => {
   try {
     //  create order from cart
+    console.log(req.body);
     if (req.body.payMethod === "cod") {
       let order = await Order.create({
         ...req.body,

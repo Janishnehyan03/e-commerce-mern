@@ -44,9 +44,6 @@ const orderSchema = new mongoose.Schema(
     zip: {
       type: String,
     },
-    note: {
-      type: String,
-    },
     payMethod: {
       type: String,
       required: true,

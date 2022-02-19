@@ -10,7 +10,7 @@ function Orders() {
       let res = await Axios.post("/orders/my-orders");
       setOrders(res.data.orders);
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
   useEffect(() => {

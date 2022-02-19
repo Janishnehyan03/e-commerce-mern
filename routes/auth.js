@@ -3,6 +3,8 @@ const authServices = require("../controllers/authServices.js");
 const passport = require("passport");
 
 const router = require("express").Router();
+// refresh token
+router.post("/check-loggedIn", authController.checkLoggedIn);
 
 // register
 router.post("/register", authController.register);
@@ -10,7 +12,7 @@ router.post("/register", authController.register);
 // login
 router.post("/login", authController.login);
 // logout
-router.post("/logout", authController.verifyToken, authController.logout);
+router.post("/logout",  authController.logout);
 // isLoggedIn
 router.get("/getUser", authController.getUser);
 router.get("/verify/:token", authController.verifyEmail);

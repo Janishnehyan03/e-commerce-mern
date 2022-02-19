@@ -5,9 +5,12 @@ import { useParams } from "react-router-dom";
 import Axios from "../../src/Axios";
 import moment from "moment";
 import { toast, ToastContainer } from "react-toastify";
+import {UserAuthContext} from "../context/UserAuth";
+import { useContext } from "react";
 
 function RatingComponent() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { authData } = useContext(UserAuthContext);
+  const user = authData;
   const [rating, setRating] = useState(3);
   const [review, setReview] = useState("");
   const [reviews, setReviews] = useState([]);
@@ -25,7 +28,7 @@ function RatingComponent() {
       const response = await Axios.get(`/reviews/${productId}`);
       setReviews(response.data.reviews);
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
   const handleSubmit = async (e) => {
@@ -39,8 +42,8 @@ function RatingComponent() {
       setRating(3);
       getProductReviews();
     } catch (error) {
-      console.log(error.response);
-      toast.error(error.response.data.message, {
+      console.log(error);
+      toast.error(error.data.message, {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
       });
@@ -53,8 +56,8 @@ function RatingComponent() {
         getProductReviews();
       }
     } catch (error) {
-      console.log(error.response);
-      toast.error(error.response.data.message, {
+      console.log(error);
+      toast.error(error.data.message, {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
       });

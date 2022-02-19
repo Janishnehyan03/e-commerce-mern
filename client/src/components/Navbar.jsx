@@ -1,30 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Transition } from "@headlessui/react";
 import { Link } from "react-router-dom";
 import Axios from "../Axios";
 import { toast } from "react-toastify";
 import Cookies from "universal-cookie";
 import { CartDetailsContext } from "../context/CartDetails";
+import { UserAuthContext } from "../context/UserAuth";
 import { useContext } from "react";
 import CartModel from "../pages/CartModel";
 
-const logout = async () => {
-  const cookies = new Cookies();
-  let res = await Axios.post("/auth/logout");
-  if (res.status === 200) {
-    cookies.remove("jwt");
-    toast.success("Logged out successfully");
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    window.location.reload();
-  }
-};
-
 function Nav() {
   const { cartDetails } = useContext(CartDetailsContext);
+  const { getAuthData, authData, setAuthData } = useContext(UserAuthContext);
   const [isOpen, setIsOpen] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = authData;
   const [cartOpen, setCartOpen] = useState(false);
+  const logout = async () => {
+    let res = await Axios.post("/auth/logout");
+    if (res.status === 200) {
+      setAuthData(null);
+      window.location.reload();
+    }
+  };
+  useEffect(() => {
+    getAuthData();
+  }, []);
   return (
     <div>
       <nav className="bg-gray-800">

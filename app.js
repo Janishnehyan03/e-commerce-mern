@@ -16,7 +16,6 @@ const morgan = require("morgan");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 
-
 app.use(
   cors({
     origin: true,
@@ -54,9 +53,6 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/reviews", reviewRoutes);
 app.use("/api/v1/categories", categoryRoutes);
-// app.get("/", (req, res) => {
-//   res.render('email/verify');
-// });
 
 // send react app
 if (process.env.NODE_ENV === "production") {

@@ -27,7 +27,7 @@ function Login() {
     if (res.data.success) {
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      cookies.set("jwt", res.data.token);
+      // cookies.set("jwt", res.data.token);
       toast.success(res.data.message, {
         position: "top-right",
       });

@@ -25,7 +25,7 @@ function AddCategory() {
       setImage(secure_url);
       setLoading(false);
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
   const addProduct = async (e) => {
@@ -46,7 +46,7 @@ function AddCategory() {
           });
         }
       } catch (error) {
-        console.log(error.response);
+        console.log(error);
         toast.error("error");
         setLoading(false);
       }

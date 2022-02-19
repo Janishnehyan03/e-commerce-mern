@@ -50,3 +50,38 @@ exports.getCategory = async (req, res, next) => {
     });
   }
 };
+exports.deleteCategory = async (req, res, next) => {
+  try {
+    const category = await Category.findByIdAndDelete(req.params.id);
+    res.status(200).json({
+      status: "success",
+      category,
+      success: true,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      error,
+      success: false,
+    });
+  }
+};
+
+exports.updateCategory = async (req, res, next) => {
+  try {
+    const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.status(200).json({
+      status: "success",
+      category,
+      success: true,
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      error,
+      success: false,
+    });
+  }
+};

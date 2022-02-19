@@ -2,18 +2,22 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Axios from "../../Axios";
 
-function AllProducts() {
-  const [products, setProducts] = useState([]);
+function AllCategories() {
+  const [categories, setCategories] = useState([]);
 
-  const getProducts = async () => {
-    let { data } = await Axios.get("/products");
-    setProducts(data.products);
+  const getCategories = async () => {
+    try {
+      let { data } = await Axios.get("/categories");
+      setCategories(data.categories);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const deleteItem = async (id, item) => {
     if (window.confirm(`Are you sure you want to delete ${item}?`)) {
       try {
-        let res = await Axios.delete(`/products/${id}`);
-        getProducts();
+        let res = await Axios.delete(`/categories/${id}`);
+        getCategories();
       } catch (error) {
         console.log(error);
       }
@@ -21,16 +25,19 @@ function AllProducts() {
   };
 
   useEffect(() => {
-    getProducts();
+    getCategories();
   }, []);
   return (
     <div className="flex flex-col">
+      <Link
+        to={"/add-category"}
+        class=" cursor-pointer bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center absolute right-2 my-4"
+      >
+        Add Category
+      </Link>
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
           <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <Link to={'/add-product'} class=" cursor-pointer bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center absolute right-2 my-4">
-              Add Product
-            </Link>
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -46,12 +53,7 @@ function AllProducts() {
                   >
                     Name
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Category
-                  </th>
+
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -70,23 +72,20 @@ function AllProducts() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {products.map((product) => (
+                {categories.map((product) => (
                   <tr key={product._id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-20 w-20">
                           <img
                             className="rounded-md"
-                            src={product.img}
-                            alt=""
+                            src={product.image}
+                            alt={product.name}
                           />
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">
                             {product.name}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {product.email}
                           </div>
                         </div>
                       </div>
@@ -97,15 +96,10 @@ function AllProducts() {
                       </div>
                       <div className="text-sm text-gray-500">{product._id}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                        {product.category && product.category.name}
-                      </span>
-                    </td>
 
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <Link
-                        to={`/admin/edit-product/${product._id}`}
+                        to={`/admin/edit-category/${product._id}`}
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         Edit
@@ -115,7 +109,7 @@ function AllProducts() {
                       <button
                         to={`/admin/edit-product/${product._id}`}
                         className="text-red-600 hover:text-red-800"
-                        onClick={() => deleteItem(product._id, product.title)}
+                        onClick={() => deleteItem(product._id, product.name)}
                       >
                         Delete
                       </button>
@@ -131,4 +125,4 @@ function AllProducts() {
   );
 }
 
-export default AllProducts;
+export default AllCategories;

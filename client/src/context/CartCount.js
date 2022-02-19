@@ -12,7 +12,7 @@ export const CartProvider = (props) => {
         setCartCount(res.data.products.length);
       }
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
   const value = {

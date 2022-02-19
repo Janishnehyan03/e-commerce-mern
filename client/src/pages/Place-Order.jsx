@@ -3,15 +3,17 @@ import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Axios from "../Axios";
 import { CartDetailsContext } from "../context/CartDetails";
+import { UserAuthContext } from "../context/UserAuth";
 import OrderBtn from "./OrderBtn";
 
 function PlaceOrder() {
   const { cartDetails, getCartDetails } = useContext(CartDetailsContext);
-  let user = JSON.parse(localStorage.getItem("user"));
+  const { authData } = useContext(UserAuthContext);
+  let user = authData;
   const [totalPrice, setTotalPrice] = useState(0);
 
   const [payMethod, setPayMethod] = useState(null);
-  const [address, setAddress] = useState(null);
+  const [address, setAddress] = useState([]);
   const [formData, setFormData] = useState({
     products: [],
     amount: 0,
@@ -30,15 +32,16 @@ function PlaceOrder() {
         ...formData,
         products: cartDetails,
         amount: totalPrice,
-        address: res.data.address.address,
-        phone: res.data.address.phone,
-        city: res.data.address.city,
-        zip: res.data.address.zip,
-        state: res.data.address.state,
-        country: res.data.address.country,
+        address: res.data.address[0].address,
+        phone: res.data.address[0].phone,
+        city: res.data.address[0].city,
+        zip: res.data.address[0].zip,
+        state: res.data.address[0].state,
+        country: res.data.address[0].country,
       });
+      // console.log(formData);
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
 
@@ -49,7 +52,7 @@ function PlaceOrder() {
   const removeFromCart = async (id, name) => {
     if (window.confirm(`Are you sure you want to remove ${name} from cart?`)) {
       try {
-        let res = await Axios.patch(`/carts/remove-from-cart/${id}`);
+        await Axios.patch(`/carts/remove-from-cart/${id}`);
         getCartDetails();
       } catch (error) {
         console.log(error);
@@ -182,50 +185,52 @@ function PlaceOrder() {
         <div className="container p-12 mx-auto">
           <div className="flex flex-col w-full px-0 mx-auto md:flex-row">
             <div className="flex flex-col w-full ml-0 lg:ml-12 lg:w-2/5">
-              {address ? (
-                <div className="pt-12 md:pt-0 2xl:ps-4">
-                  <h2 className="text-xl font-bold">Your Address </h2>
+              {address.length > 0 ? (
+                address.map((addressData) => (
+                  <div className="pt-12 md:pt-0 2xl:ps-4">
+                    <h2 className="text-xl font-bold">Your Address </h2>
 
-                  <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
-                    <span className="text-gray-500">Username</span>{" "}
-                    <span className="ml-2">{address.user.username}</span>
-                  </div>
+                    <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
+                      <span className="text-gray-500">Username</span>{" "}
+                      <span className="ml-2">{addressData.user.username}</span>
+                    </div>
 
-                  <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
-                    <span className="text-gray-500">Email</span>{" "}
-                    <span className="ml-2">{address.email}</span>
-                  </div>
-                  <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
-                    <span className="text-gray-500">Address </span>{" "}
-                    <span className="ml-2">{address.address}</span>
-                  </div>
-                  <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
-                    <span className="text-gray-500">Zip </span>{" "}
-                    <span className="ml-2">{address.zip}</span>
-                  </div>
-                  <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
-                    <span className="text-gray-500">Country </span>{" "}
-                    <span className="ml-2">{address.country}</span>
-                  </div>
-                  <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
-                    <span className="text-gray-500">State </span>{" "}
-                    <span className="ml-2">{address.state}</span>
-                  </div>
-                  <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
-                    <span className="text-gray-500">Place </span>{" "}
-                    <span className="ml-2">{address.city}</span>
-                  </div>
-                  <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
-                    <span className="text-gray-500">Phone </span>{" "}
-                    <span className="ml-2">{address.phone}</span>
-                  </div>
+                    <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
+                      <span className="text-gray-500">Email</span>{" "}
+                      <span className="ml-2">{addressData.email}</span>
+                    </div>
+                    <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
+                      <span className="text-gray-500">Address </span>{" "}
+                      <span className="ml-2">{addressData.address}</span>
+                    </div>
+                    <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
+                      <span className="text-gray-500">Zip </span>{" "}
+                      <span className="ml-2">{addressData.zip}</span>
+                    </div>
+                    <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
+                      <span className="text-gray-500">Country </span>{" "}
+                      <span className="ml-2">{addressData.country}</span>
+                    </div>
+                    <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
+                      <span className="text-gray-500">State </span>{" "}
+                      <span className="ml-2">{addressData.state}</span>
+                    </div>
+                    <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
+                      <span className="text-gray-500">Place </span>{" "}
+                      <span className="ml-2">{addressData.city}</span>
+                    </div>
+                    <div className="flex items-center w-full py-4 text-sm font-semibold border-b border-gray-300 lg:py-5 lg:px-3 text-heading last:border-b-0 last:text-base last:pb-0">
+                      <span className="text-gray-500">Phone </span>{" "}
+                      <span className="ml-2">{addressData.phone}</span>
+                    </div>
 
-                  <div className="mt-4">
-                    <button className="w-full px-6 py-2 text-white bg-blue-600 hover:bg-blue-900">
-                      Edit Address
-                    </button>
+                    <div className="mt-4">
+                      <button className="w-full px-6 py-2 text-white bg-blue-600 hover:bg-blue-900">
+                        Edit address
+                      </button>
+                    </div>
                   </div>
-                </div>
+                ))
               ) : (
                 <div className="mt-4">
                   <Link

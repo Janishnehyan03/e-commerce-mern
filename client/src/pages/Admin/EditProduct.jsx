@@ -64,7 +64,7 @@ export default function EditProduct() {
         setLoading(false);
       }
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
       toast.error("error");
       setLoading(false);
     }

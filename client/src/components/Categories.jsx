@@ -8,7 +8,6 @@ function Categories() {
   const [categories, setCategories] = useState([]);
   const getAllCategories = async () => {
     let { data } = await Axios.get("/categories");
-    console.log(data);
     setCategories(data.categories);
   };
   useEffect(() => {

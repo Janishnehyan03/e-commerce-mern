@@ -37,7 +37,7 @@ function OrderBtn({ payMethod, cartDetails, formData, totalPrice, user }) {
         window.location.href = "/success-order";
       }
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
       toast.error("Error Placing Order", {
         position: "top-center",
         autoClose: 2000,

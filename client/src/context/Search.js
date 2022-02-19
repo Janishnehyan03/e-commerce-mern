@@ -1,11 +1,13 @@
 import { createContext, useContext, useState } from "react";
 import Axios from "../Axios";
+import { UserAuthContext } from "./UserAuth";
 
 export const SearchContext = createContext({});
 
 export const SearchProvider = (props) => {
   const [searchData, setSearchData] = useState([]);
-  const user = localStorage.getItem("user");
+  const { authData } = useContext(UserAuthContext);
+  const user =authData
   const [search, setSearch] = useState("");
   const [searchHistory, setSearchHistory] = useState("");
   const getSearchData = async () => {
@@ -16,7 +18,7 @@ export const SearchProvider = (props) => {
         setSearchHistory(res.data.search);
       }
     } catch (error) {
-      console.log(error.response);
+      console.log(error);
     }
   };
   const value = {

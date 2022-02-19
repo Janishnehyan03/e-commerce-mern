@@ -148,13 +148,14 @@ exports.createAddress = async (req, res) => {
 // get my addresses
 exports.getMyAddresses = async (req, res) => {
   try {
-    const address = await Address.findOne({ user: req.user._id }).populate(
+    const address = await Address.find({ user: req.user._id }).populate(
       "user",
       {
         username: 1,
         email: 1,
       }
     );
+    console.log(address);
     res.status(200).json({
       message: "Address fetched successfully",
       address,
