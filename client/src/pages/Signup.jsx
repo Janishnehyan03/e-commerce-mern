@@ -4,17 +4,16 @@ import { CircularProgress } from "@material-ui/core";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, Redirect } from "react-router-dom";
-import Cookies from "universal-cookie";
+import { UserAuthContext } from "../context/UserAuth";
+import { useContext } from "react";
 function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
-  const cookies = new Cookies();
+  const { userAuth } = useContext(UserAuthContext);
 
-  // redirect to home page if token exist
-  const isAuthenticated = localStorage.getItem("token");
-  if (isAuthenticated) {
+  if (userAuth) {
     return <Redirect to="/" />;
   }
 
@@ -34,14 +33,7 @@ function SignUp() {
           position: "top-center",
           autoClose: 5000,
         });
-        cookies.set(
-          "jwt",
-          res.data.token,
-          { httpOnly: false, secure: true },
-          { path: "/" },
-          { expire: new Date(Date.now() + 3600 * 1000) }
-        );
-        localStorage.setItem("emailData", JSON.stringify(res.data.user));
+
         window.location.href = "/verify-msg";
       }
     } catch (error) {

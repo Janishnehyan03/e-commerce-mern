@@ -6,13 +6,13 @@ import { Link, Redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { GoogleLogin } from "react-google-login";
 // import FacebookLogin from "react-facebook-login";
+import { UserAuthContext } from "../context/UserAuth";
+import { useContext } from "react";
 
 function Login() {
-  const cookies = new Cookies();
-
   // redirect to home page if token exist
-  const isAuthenticated = localStorage.getItem("token");
-  if (isAuthenticated) {
+  const { authData } = useContext(UserAuthContext);
+  if (authData) {
     return <Redirect to="/" />;
   }
   const loginWithGoogle = async ({ profileObj }) => {
@@ -25,9 +25,6 @@ function Login() {
       googleId: profileObj.googleId,
     });
     if (res.data.success) {
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      // cookies.set("jwt", res.data.token);
       toast.success(res.data.message, {
         position: "top-right",
       });
