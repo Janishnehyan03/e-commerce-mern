@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Transition } from "@headlessui/react";
 import { Link } from "react-router-dom";
 import Axios from "../Axios";
-import { toast } from "react-toastify";
-import Cookies from "universal-cookie";
 import { CartDetailsContext } from "../context/CartDetails";
 import { UserAuthContext } from "../context/UserAuth";
 import { useContext } from "react";

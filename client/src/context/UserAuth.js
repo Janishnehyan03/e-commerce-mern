@@ -12,7 +12,6 @@ export const UserAuthProvider = (props) => {
         setAuthData(res.data.user);
       }
     } catch (error) {
-      console.log(error);
       if (error.status === 401) {
         setAuthData(null);
       } else if (error.error === "User not found") {

@@ -1,25 +1,22 @@
 const User = require("../models/userModel");
-const jwt = require("jsonwebtoken");
 
 exports.googleSignup = async (req, res, next) => {
   try {
     let user = await User.findOne({ googleId: req.body.googleId });
-    let token = await user.generateAuthToken();
 
     if (user) {
-      await res.cookie("jwt", token, {
+      let token = await user.generateAuthToken();
+
+      res.cookie("jwt", token, {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7,
       });
-      res
-        .status(200)
-        // send cookies to client
-        .json({
-          message: "Login success",
-          user: user,
-          success: true,
-          token: token,
-        });
+
+      res.status(200).json({
+        message: "Login success",
+        user: user,
+        success: true,
+      });
     } else {
       user = await User.create({
         googleId: req.body.googleId,
@@ -40,7 +37,6 @@ exports.googleSignup = async (req, res, next) => {
         message: "Login success",
         user: user,
         success: true,
-        token: token,
       });
     }
   } catch (error) {
@@ -70,6 +66,7 @@ exports.facebookSignup = async (req, res, next) => {
         isVerified: true,
         image: req.body.image,
       });
+
       res.status(200).json({
         message: "Login success",
         user: user,
