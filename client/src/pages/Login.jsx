@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import Axios from "../Axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link, Redirect } from "react-router-dom";
-import Cookies from "universal-cookie";
+import {  Redirect } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 // import FacebookLogin from "react-facebook-login";
 import { UserAuthContext } from "../context/UserAuth";

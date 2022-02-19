@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
@@ -34,7 +34,7 @@ import CartModel from "./pages/CartModel";
 import AddCategory from "./pages/Admin/AddCategory";
 import AllCategories from "./pages/Admin/AllCategories";
 import EditCategory from "./pages/Admin/EditCategory";
-
+import AdminProtected from "./pages/Admin/AdminProtected";
 
 function App() {
   const [cartOpen, setCartOpen] = useState(false);
@@ -67,15 +67,15 @@ function App() {
                   <Route path="/signup" component={Signup} />
                   <Route path="/verify-msg" component={Verify} />
                   {/* if url is not available load an error page with current url */}
-                  <ProtectedRoute
+                  <AdminProtected
                     path={"/admin/edit-product/:id"}
                     component={EditProduct}
                   />
-                  <ProtectedRoute
+                  <AdminProtected
                     path={"/admin/edit-category/:id"}
                     component={EditCategory}
                   />
-                  <ProtectedRoute
+                  <AdminProtected
                     path={"/add-category"}
                     component={AddCategory}
                   />
@@ -83,18 +83,18 @@ function App() {
                     path={"/add-address"}
                     component={CreateAddress}
                   />
-                  <ProtectedRoute
+                  <AdminProtected
                     path={"/admin-categories"}
                     component={AllCategories}
                   />
 
                   <ProtectedRoute path={"/profile"} component={Profile} />
                   <ProtectedRoute path={"/checkout"} component={Checkout} />
-                  <ProtectedRoute
+                  <AdminProtected
                     path={"/add-product"}
                     component={AddProduct}
                   />
-                  <ProtectedRoute
+                  <AdminProtected
                     path="/admin-products"
                     component={AllProducts}
                   />
@@ -108,10 +108,10 @@ function App() {
                     path="/rating/:id"
                     component={RatingComponent}
                   />
-                  <ProtectedRoute path="/dashboard" component={Dashboard} />
-                  <ProtectedRoute path="/admin-orders" component={All_orders} />
-                  <ProtectedRoute path="/admin-users" component={All_users} />
-                  <ProtectedRoute path="/view-user/:id" component={View_user} />
+                  <AdminProtected path="/admin-orders" component={All_orders} />
+                  <AdminProtected path="/admin-users" component={All_users} />
+                  <AdminProtected path="/view-user/:id" component={View_user} />
+                  <AdminProtected path="/dashboard" component={Dashboard} />
                 </ProductProvider>
               </Switch>
             </CartProvider>

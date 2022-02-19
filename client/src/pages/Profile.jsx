@@ -1,15 +1,18 @@
+import { useContext } from "react";
 import { useEffect, useState } from "react";
 import Axios from "../Axios";
+import { UserAuthContext } from "../context/UserAuth";
 
 export default function Profile() {
   const [user, setUser] = useState({});
   const [address, setAddress] = useState({});
+  const { authData } = useContext(UserAuthContext);
   const getMyAddress = async () => {
     const { data } = await Axios.post("/users/my-address");
     setAddress(data.address);
   };
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user")));
+    setUser(authData);
     getMyAddress();
   }, []);
   return (
