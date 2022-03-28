@@ -3,7 +3,7 @@ import React from "react";
 function Features() {
   return (
     <>
-      <div className="container py-16 mx-36">
+      <div className="container ml-4 mt-4">
         <div className="w-10/12 grid sm:grid-cols-1 md:grid-cols-3  gap-6 max-auto justify-center ">
           <div className="border border-primary rounded-sm px-3 py-6 flex justify-center items-center gap-5">
             {/* delivery van image from online */}

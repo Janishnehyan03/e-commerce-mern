@@ -36,6 +36,7 @@ function Banner() {
   ];
 
   const nextSlide = () => {
+    console.log("nextSlide");
     if (current === data.length - 1) {
       setCurrent(0);
     } else {
@@ -58,54 +59,87 @@ function Banner() {
   return (
     <>
       <div
-        className="bg-cover bg-no-repeat bg-center py-36 relative"
-        style={{
-          backgroundImage: "url(" + data[current].image + ")",
-        }}
+        id="carouselExampleCaptions"
+        className="carousel slide relative"
+        data-bs-ride="carousel"
       >
-        <div className="container mx-36">
-          <h1 className="text-6xl text-white font-medium mb-4 capitalize">
-            {data[current].title}
-          </h1>
-          <p className="text-white text-xl font-medium mb-4">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Reprehenderit, quisquam.
-          </p>
-          <div className="mt-12">
-            <a
-              href="#"
-              className="bg-primary border border-primary text-white px-8 py-3 font-medium rounded-md hover:bg-transparent hover:text-primary transition"
-            >
-              Shop Now
-            </a>
+        <div className="carousel-indicators absolute right-0 bottom-0 left-0 flex justify-center p-0 mb-4">
+          <button
+            type="button"
+            data-bs-target="#carouselExampleCaptions"
+            data-bs-slide-to={0}
+            className="active"
+            aria-current="true"
+            aria-label="Slide 1"
+          />
+          <button
+            type="button"
+            data-bs-target="#carouselExampleCrossfade"
+            data-bs-slide-to="0"
+            class="active"
+            aria-current="true"
+            aria-label="Slide 1"
+          ></button>
+          <button
+            type="button"
+            data-bs-target="#carouselExampleCaptions"
+            data-bs-slide-to={2}
+            aria-label="Slide 3"
+          />
+        </div>
+        <div className="carousel-inner relative w-full overflow-hidden">
+          <div className="carousel-item active relative float-left w-full">
+            <img src={data[current].image} className="block w-full" alt="..." />
+            <div className="carousel-caption hidden md:block absolute text-center">
+              <h5 className="text-xl">First slide label</h5>
+              <p>
+                Some representative placeholder content for the first slide.
+              </p>
+            </div>
           </div>
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 top-60 mt-4 mr-4 text-3xl text-white font-medium"
-          >
+        </div>
+        <button
+          className="carousel-control-prev absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline left-0"
+          type="button"
+          onClick={prevSlide}
+        >
+          <span
+            className="carousel-control-prev-icon inline-block bg-no-repeat "
+            aria-hidden="true"
+          />
+          <span className="visually-hidden ml-4 text-3xl text-white">
+            {" "}
             &#10094;
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute right-4 top-60 mt-4 text-3xl text-white font-medium"
-          >
+          </span>
+        </button>
+        <button
+          className="carousel-control-next absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline right-0"
+          type="button"
+          onClick={nextSlide}
+        >
+          <span
+            className="carousel-control-next-icon inline-block bg-no-repeat"
+            aria-hidden="true"
+          />
+          <span className="visually-hidden mr-4 text-3xl text-white">
+            {" "}
             &#10095;
+          </span>
+        </button>
+      </div>
+      {/* slide count dots */}
+      <div className="flex justify-center mt-12 bottom-4 ml-10">
+        {data.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => setCurrent(item.id - 1)}
+            className={`${
+              current === item.id - 1 ? "bg-gray-600" : "bg-transparent"
+            } border border-primary text-white rounded-xl font-medium px-2 hover:bg-transparent hover:text-primary transition mx-2 `}
+          >
+            &#9679;
           </button>
-        </div>
-        {/* slide count dots */}
-        <div className="flex justify-center mt-12 absolute bottom-4 left-96 ml-10">
-          {data.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setCurrent(item.id - 1)}
-              className={`${
-                current === item.id - 1 ? "bg-primary" : "bg-transparent"
-              } border border-primary text-white rounded-2xl font-medium px-2 hover:bg-transparent hover:text-primary transition mx-2 `}
-            >
-              &#9679;
-            </button>
-          ))}
-        </div>
+        ))}
       </div>
     </>
   );

@@ -7,7 +7,7 @@ import { CircularProgress } from "@material-ui/core";
 function AddCategory() {
   const [name, setname] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const sendToCloudinary = async (e) => {
@@ -32,7 +32,7 @@ function AddCategory() {
     e.preventDefault();
     setLoading(true);
     await sendToCloudinary(e);
-    if (typeof image === "string") {
+    if (typeof (image === "string")) {
       try {
         let res = await Axios.post("/categories", {
           name,
@@ -40,7 +40,7 @@ function AddCategory() {
           image,
         });
         if (res.data.success) {
-          toast.success(res.data.message, {
+          toast.success('Category created successfully', {
             position: "top-center",
             autoClose: 2000,
           });

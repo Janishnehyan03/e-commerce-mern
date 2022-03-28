@@ -76,7 +76,6 @@ function AddProduct() {
           setLoading(false);
         }
       } catch (error) {
-        console.log(error);
         toast.error("error");
         setLoading(false);
       }
@@ -196,6 +195,7 @@ function AddProduct() {
                         onChange={(e) => setCategory(e.target.value)}
                         value={category}
                       >
+                        <option value="">Select Category</option>
                         {allCategories.map((category) => (
                           <option key={category._id} value={category._id}>
                             {category.name}
