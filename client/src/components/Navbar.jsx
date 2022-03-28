@@ -161,8 +161,14 @@ function Nav() {
           leaveTo="opacity-0 scale-95"
         >
           {(ref) => (
-            <div className="md:hidden" id="mobile-menu">
+            <div className="md:hidden" id="mobile-menu" onClick={()=>setIsOpen(!isOpen)}>
               <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <Link
+                  to={"/"}
+                  className="hover:bg-gray-700 text-white block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Home
+                </Link>
                 <div
                   onClick={() => setCartOpen(!cartOpen)}
                   className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
@@ -177,6 +183,12 @@ function Nav() {
                   className="hover:bg-gray-700 text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
                   Orders
+                </Link>
+                <Link
+                  to={"/login"}
+                  className="hover:bg-gray-700 text-white block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Login
                 </Link>
               </div>
             </div>
