@@ -126,14 +126,14 @@ exports.verifyToken = async (req, res, next) => {
 // verify admin token for admin routes
 exports.verifyAdminToken = async (req, res, next) => {
   try {
-    const authToken = req.headers.authorization;
+    const authToken = req.cookies.jwt;
     if (!authToken) {
       return res.status(401).json({
         message: "No token provided",
       });
     }
-    const token = authToken.split(" ")[1];
-    const decoded = await jwt.verify(token, process.env.JWT_KEY);
+    const token = authToken
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
     const user = await User.findById(decoded._id);
     if (!user.isAdmin) {
       return res.status(401).json({

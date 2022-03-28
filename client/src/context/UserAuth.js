@@ -8,6 +8,8 @@ export const UserAuthProvider = (props) => {
   const getAuthData = async () => {
     try {
       let res = await Axios.post("/auth/check-loggedIn/");
+      // console.log(res);
+      console.log(res.data);
       if (res.data.success) {
         setAuthData(res.data.user);
       }

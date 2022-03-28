@@ -12,5 +12,6 @@ router.delete("/:id", verifyToken, userController.deleteUser);
 router.get("/stats", verifyAdminToken, userController.getUserStats);
 router.post("/address", verifyToken, userController.createAddress);
 router.post("/my-address", verifyToken, userController.getMyAddresses);
+router.patch('/address/default/:id', verifyToken, userController.setDefaultAddress);
 
 module.exports = router;

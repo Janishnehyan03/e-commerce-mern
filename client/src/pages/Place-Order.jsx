@@ -225,9 +225,12 @@ function PlaceOrder() {
                     </div>
 
                     <div className="mt-4">
-                      <button className="w-full px-6 py-2 text-white bg-blue-600 hover:bg-blue-900">
-                        Edit address
-                      </button>
+                      <Link
+                        to={"/address"}
+                        className="w-full px-6 py-2 text-white bg-blue-600 hover:bg-blue-900"
+                      >
+                        Mangage Address
+                      </Link>
                     </div>
                   </div>
                 ))

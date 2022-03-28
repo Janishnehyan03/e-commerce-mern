@@ -155,10 +155,39 @@ exports.getMyAddresses = async (req, res) => {
         email: 1,
       }
     );
-    console.log(address);
     res.status(200).json({
       message: "Address fetched successfully",
       address,
+      success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      error,
+    });
+  }
+};
+
+exports.setDefaultAddress = async (req, res) => {
+  try {
+    // make all addresses not default and then set the selected address to default
+    await Address.updateMany({ user: req.user._id }, { isDefault: false });
+    const address = await Address.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          isDefault: true,
+        },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    res.status(200).json({
+      message: "Address updated successfully",
+      address,
+      success: true,
     });
   } catch (error) {
     console.log(error);

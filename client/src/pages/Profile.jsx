@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useEffect, useState } from "react";
 import Axios from "../Axios";
 import { UserAuthContext } from "../context/UserAuth";
+import {Link} from 'react-router-dom'
 
 export default function Profile() {
   const [user, setUser] = useState({});
@@ -66,7 +67,11 @@ export default function Profile() {
               <dt className="text-sm font-medium text-gray-500">
                 Your address
               </dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"></dd>
+              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <Link to='/address' className="text-sm font-medium bg-gray-800 text-white sm:mt-0 sm:col-span-2 py-2 px-4">
+                  view address
+                </Link >
+              </dd>
             </div>
           </dl>
         </div>

@@ -20,9 +20,7 @@ function Nav() {
       window.location.reload();
     }
   };
-  useEffect(() => {
-    getAuthData();
-  }, []);
+
   return (
     <div>
       <nav className="bg-gray-800">
@@ -165,11 +163,20 @@ function Nav() {
           {(ref) => (
             <div className="md:hidden" id="mobile-menu">
               <div ref={ref} className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <div
+                  onClick={() => setCartOpen(!cartOpen)}
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
+                >
+                  Cart
+                  <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-green-600 rounded-sm">
+                    {cartDetails.length}
+                  </span>
+                </div>
                 <Link
-                  href="#"
+                  to={"/orders"}
                   className="hover:bg-gray-700 text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
-                  Dashboard
+                  Orders
                 </Link>
               </div>
             </div>

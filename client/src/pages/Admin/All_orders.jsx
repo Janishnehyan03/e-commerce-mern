@@ -9,9 +9,8 @@ function All_orders() {
     try {
       const response = await Axios.get("/orders");
       setOrders(response.data.orders);
-      console.log(response.data);
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
     }
   };
   console.log(orders);
@@ -38,9 +37,11 @@ function All_orders() {
           </thead>
           <tbody>
             {orders.map((order) => (
-              <tr key={order._id}>
+              <tr>
                 <td className="border px-4 py-2">{order._id}</td>
-                <td className="border px-4 py-2">{order.userId._id}</td>
+                <td className="border px-4 py-2">
+                  {order.userId && order.userId._id}
+                </td>
                 <td className="border px-4 py-2">
                   <ul>
                     {order.products.map((product) => (

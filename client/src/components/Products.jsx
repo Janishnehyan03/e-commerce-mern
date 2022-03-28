@@ -19,7 +19,6 @@ function Products({ cartOpen, setCartOpen }) {
   const user = authData;
   const [images, setImages] = useState([]);
 
-
   let getImageData = async () => {
     setLoading(true);
     let data = await axios.get("https://fakestoreapi.com/products");
@@ -70,8 +69,6 @@ function Products({ cartOpen, setCartOpen }) {
                   key={index}
                   className="bg-white shadow rounded overflow-hidden group cursor-pointer"
                 >
-                  {/* image */}
-                  {/* {data.map((product) => ( */}
                   <div className="relative">
                     {images ? (
                       <img
@@ -124,28 +121,45 @@ function Products({ cartOpen, setCartOpen }) {
                   </div>
                   {/* if product in cart show added to cart or add to cart */}
                   <div className="flex px-4 py-2 justify-center my-8 ">
-                    {cartDetails.find(
-                      (cartItem) => cartItem._id === item._id
-                    ) ? (
-                      <button
-                        onClick={() => goToCart()}
-                        className="bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded-full"
-                      >
-                        Go to cart{" "}
-                      </button>
+                    {item.stock <= 0 ? (
+                      <p className="text-red-500">Out of Stock</p>
                     ) : (
                       <>
-                        {user && (
+                        {cartDetails.find(
+                          (cartItem) => cartItem._id === item._id
+                        ) ? (
                           <button
-                            onClick={() => addToCart(item._id, item.title)}
-                            className="bg-gray-800 text-white font-bold py-2 px-4 rounded-full hover:bg-gray-600"
+                            onClick={() => goToCart()}
+                            className="bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded-full"
                           >
-                            Add To Cart
+                            Go to cart{" "}
                           </button>
+                        ) : (
+                          <>
+                            {user && (
+                              <button
+                                onClick={() => addToCart(item._id, item.title)}
+                                className="bg-gray-800 text-white font-bold py-2 px-4 rounded-full hover:bg-gray-600"
+                              >
+                                Add To Cart
+                              </button>
+                            )}
+                          </>
                         )}
                       </>
                     )}
                   </div>
+
+                  {/* show out of stock and only 5 items stock if stock less than 5 */}
+                  {item.stock === 0 ? (
+                    <></>
+                  ) : item.stock < 6 ? (
+                    <p className="text-red-400 text-center">
+                      only {item.stock} left
+                    </p>
+                  ) : (
+                    <p className="text-green-400 text-center">in stock</p>
+                  )}
                 </div>
               ))}
             </div>

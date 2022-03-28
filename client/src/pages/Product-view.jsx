@@ -4,11 +4,13 @@ import { Link, useHistory, useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Axios from "../Axios";
 import { CartDetailsContext } from "../context/CartDetails";
+import { UserAuthContext } from "../context/UserAuth";
 
 function ProductView({ cartOpen, setCartOpen }) {
   // console params from url
   const [product, setProduct] = useState({});
   const { addToCart, cartDetails, getCart } = useContext(CartDetailsContext);
+  const { authData } = useContext(UserAuthContext);
   const history = useHistory();
 
   const params = useParams();
@@ -78,10 +80,16 @@ function ProductView({ cartOpen, setCartOpen }) {
             <div className="text-xs text-gray-500 ml-3">(150 reviews)</div>
           </div>
           <div>
-            <p className="text-gray-800 font-semibold space-x-2">
-              <span>Availabilty:</span>
-              <span className="text-green-600">In stock</span>
-            </p>
+            {/* show out of stock and only 5 items stock if stock less than 5 */}
+            {product.stock === 0 ? (
+              <></>
+            ) : product.stock < 6 ? (
+              <p className="text-red-400 text-center">
+                only {product.stock} left
+              </p>
+            ) : (
+              <p className="text-green-400 text-center">in stock</p>
+            )}
             <p className="space-x-2">
               <span className="text-gray-800 font-semibold">Brand:</span>
               <span className="text-gray-600">Apex</span>
@@ -103,24 +111,35 @@ function ProductView({ cartOpen, setCartOpen }) {
 
           {/* add to cart */}
           <div className="pt-4 mt-8">
-            {cartDetails.find((item) => item._id === product._id) ? (
-              <button
-                onClick={() => goToCart()}
-                className="w-40 bg-gray-500 text-white font-semibold py-2 px-4  hover:bg-white hover:text-primary transition border border-primary mr-4"
-              >
-                <i className="fas fa-shopping-bag mr-4"></i> Go To Cart
+            {product.stock <= 0 ? (
+              <button className="bg-red-600 text-white font-semibold py-2 px-4 rounded-lg">
+                Out of Stock
               </button>
             ) : (
-              <button
-                onClick={() => addToCart(product._id, product.title)}
-                className="w-40 bg-primary text-white font-semibold py-2 px-4  hover:bg-white hover:text-primary transition border border-primary mr-4"
-              >
-                <i className="fas fa-shopping-bag mr-4"></i> Add to cart
-              </button>
+              <>
+                {cartDetails.find(
+                  (cartItem) => cartItem._id === product._id
+                ) ? (
+                  <button
+                    onClick={() => goToCart()}
+                    className="bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded-full"
+                  >
+                    Go to cart{" "}
+                  </button>
+                ) : (
+                  <>
+                    {authData && (
+                      <button
+                        onClick={() => addToCart(product._id, product.title)}
+                        className="bg-gray-800 text-white font-bold py-2 px-4 rounded-full hover:bg-gray-600"
+                      >
+                        Add To Cart
+                      </button>
+                    )}
+                  </>
+                )}
+              </>
             )}
-            <button className="w-40 bg-gray-500 text-white font-semibold py-2  hover:bg-white hover:text-gray-500 transition border hover:border-gray-500">
-              <i className="fas fa-heart mr-4"></i> Add to wishlist
-            </button>
           </div>
 
           {/* add to cart */}
