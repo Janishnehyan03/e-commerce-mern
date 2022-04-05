@@ -7,21 +7,6 @@ const {
 } = require("../utils/email");
 const uuidv4 = require("uuid/v4");
 
-const generateAccessToken = (user) => {
-  return jwt.sign(
-    {
-      id: user.id,
-      isAdmin: user.isAdmin,
-      isVerified: user.isVerified,
-      email: user.email,
-    },
-    "process.env.ACCESS_TOKEN_SECRET",
-    {
-      expiresIn: "1h",
-    }
-  );
-};
-
 exports.register = catchAsync(async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -41,16 +26,8 @@ exports.register = catchAsync(async (req, res) => {
     username,
     email,
     password,
-    verifyToken: uuidv4(),
   });
 
-  sendRegistrationEmail(
-    user.email,
-    user.username,
-    `${req.protocol}://${req.get("host")}/api/v1/auth/verify/${
-      user.verifyToken
-    }`
-  );
   let token = await user.generateAuthToken();
   res.cookie("jwt", token, {
     httpOnly: true,
@@ -61,9 +38,6 @@ exports.register = catchAsync(async (req, res) => {
     user: user,
     token: token,
     success: true,
-    url: `${req.protocol}://${req.get("host")}/api/v1/auth/verify/${
-      user.verifyToken
-    }`,
   });
 });
 
@@ -82,11 +56,6 @@ exports.login = async (req, res) => {
     return res.status(401).json({ message: "incorrect password" });
   }
   let token = await user.generateAuthToken();
-  if (!user.isVerified) {
-    return res.status(401).json({
-      message: "Please verify your email",
-    });
-  }
   res.status(200).json({
     message: "Auth successful",
     status: "success",
@@ -98,18 +67,18 @@ exports.login = async (req, res) => {
 
 // verify token
 exports.verifyToken = async (req, res, next) => {
-  if (!req.cookies.jwt) {
+  let token;
+  if (req.headers.authorization) {
+    token = req.headers.authorization.split(" ")[1];
+  } else {
+    token = req.cookies.jwt;
+  }
+  if (!token) {
     return res.status(401).json({
       message: "No token provided",
     });
   }
-  const token = req.cookies.jwt;
   try {
-    if (token === "undefined") {
-      return res.status(401).json({
-        message: "No token provided",
-      });
-    }
     const decoded = jwt.verify(token, process.env.JWT_KEY);
     const user = await User.findById(decoded._id);
     req.user = user;
@@ -132,7 +101,7 @@ exports.verifyAdminToken = async (req, res, next) => {
         message: "No token provided",
       });
     }
-    const token = authToken
+    const token = authToken;
     const decoded = jwt.verify(token, process.env.JWT_KEY);
     const user = await User.findById(decoded._id);
     if (!user.isAdmin) {
