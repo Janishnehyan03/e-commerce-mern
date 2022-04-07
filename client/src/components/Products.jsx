@@ -31,6 +31,7 @@ function Products({ cartOpen, setCartOpen }) {
     try {
       let res = await Axios.get("/products");
       setProducts(res.data.products);
+      console.log(res.data.products);
       setLoading(false);
     } catch (error) {
       console.log(error);

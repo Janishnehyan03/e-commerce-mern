@@ -5,7 +5,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 exports.getAllProducts = async (req, res) => {
   try {
     let query = req.query;
-    let products = await Product.find({ deleted: false }).populate("category");
+    let products = await Product.find().populate("category");
     let data = await Product.find({ category: new ObjectId(query.category) });
     if (query.lt) {
       query.price = { $lt: query.lt };
@@ -106,9 +106,7 @@ exports.updateProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
   try {
-    let product = await Product.findByIdAndUpdate(req.params.id, {
-      deleted: true,
-    });
+    let product = await Product.findByIdAndDelete(req.params.id);
     res.status(200).json({
       message: "Product deleted successfully",
       product,
