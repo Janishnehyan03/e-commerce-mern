@@ -21,7 +21,7 @@ function Products({ cartOpen, setCartOpen }) {
 
   let getImageData = async () => {
     setLoading(true);
-    let data = await axios.get("https://fakestoreapi.com/products");
+    let data = await Axios.get("/products");
     setImages(data.data);
     setLoading(false);
   };
