@@ -2,7 +2,7 @@ import React from "react";
 import Axios from "../Axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {  Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 // import FacebookLogin from "react-facebook-login";
 import { UserAuthContext } from "../context/UserAuth";
@@ -70,7 +70,6 @@ function Login() {
                   <span className="text-gray-500">Login with Google</span>
                 </button>
               )}
-              buttonText="Login"
             />
 
             {/* </div> */}

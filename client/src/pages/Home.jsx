@@ -7,7 +7,7 @@ import Products from "../components/Products";
 function Home({ cartOpen, setCartOpen }) {
   return (
     <>
-      <Banner />
+      {/* <Banner /> */}
       <Features />
       <Categories />
       <Products cartOpen={cartOpen} setCartOpen={setCartOpen} />
