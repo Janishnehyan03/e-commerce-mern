@@ -51,7 +51,7 @@ function Login() {
           {/* login with  google and facebook*/}
           <div className="flex items-center justify-between mt-12">
             <GoogleLogin
-                clientId="504304381401-lurd70laott0g5djebu60112qcs6kvr5.apps.googleusercontent.com"
+                clientId="518925825578-dd2a6tujkp1bsfhkg8husrlu30klvlas.apps.googleusercontent.com"
                 buttonText="Login with Google"
               onSuccess={loginWithGoogle}
               onFailure={loginWithGoogle}
